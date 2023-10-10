@@ -1,0 +1,4 @@
+.headingWrapper {
+  @apply min-w-[320px] h-[66px] md:min-w-[768px];
+  @apply flex justify-between items-center bg-black px-4 mx-auto;
+}
