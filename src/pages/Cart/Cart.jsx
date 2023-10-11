@@ -1,6 +1,17 @@
+import useStorage from '@/hooks/useStorage';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import S from './Cart.module.css';
 
 function Cart() {
+  const { productsId } = useParams();
+  const { storageData } = useStorage('pocketbase_auth');
+  const [authUserData, setAuthUserData] = useState(storageData?.model);
+  useEffect(() => {
+    setAuthUserData(storageData?.model);
+  }, [storageData]);
+  console.log(authUserData);
+  console.log(productsId);
   return (
     <div className={S.cartWrapper}>
       <h1 className="sr-only">CHECKOUT</h1>
@@ -11,8 +22,8 @@ function Cart() {
       >
         C H E C K O U T
       </span>
-      <ul className="flex">
-        <li className="mr-[20.625rem]">
+      <ul className="flex pb-2 mb-8 border-b-2 border-black">
+        <li className="mr-[56.26rem]">
           <span className="font-semibold">Product</span>
         </li>
         <li className="mr-7">
@@ -23,6 +34,12 @@ function Cart() {
         </li>
         <li>
           <span className="font-semibold">Subotal</span>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <img alt="사진" src="" />
+          <span>Hello</span>
         </li>
       </ul>
     </div>
