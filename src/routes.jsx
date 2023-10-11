@@ -5,9 +5,9 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 
-const RootLayout = lazy(() => import('./layout/RootLayout/RootLayout'));
-const Home = lazy(() => import('./pages/Home/Home'));
-const Cart = lazy(() => import('./pages/Cart/Cart'));
+const RootLayout = lazy(() => import('@/layout/RootLayout/RootLayout'));
+const Home = lazy(() => import('@/pages/Home/Home'));
+const Cart = lazy(() => import('@/pages/Cart/Cart'));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
