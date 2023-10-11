@@ -5,14 +5,15 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 
-const Home = lazy(() => import('./pages/Home/Home'));
 const RootLayout = lazy(() => import('./layout/RootLayout/RootLayout'));
+const Home = lazy(() => import('./pages/Home/Home'));
+const Cart = lazy(() => import('./pages/Cart/Cart'));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<RootLayout />}>
+    <Route path="/lumieleu" element={<RootLayout />}>
       <Route index element={<Home />} />
-      <Route path="*" element={<Home />} />
+      <Route path="cart" element={<Cart />} />
     </Route>
   )
 );
