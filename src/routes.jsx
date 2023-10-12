@@ -13,7 +13,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/lumieleu" element={<RootLayout />}>
       <Route index element={<Home />} />
-      <Route path=":productsId" element={<Cart />} />
+      <Route path="/lumieleu/:productId" element={<Cart />} />
     </Route>
   )
 );
