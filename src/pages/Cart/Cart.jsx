@@ -1,17 +1,15 @@
-import useStorage from '@/hooks/useStorage';
-import { useState, useEffect } from 'react';
+import pb from '@/api/pocketbase';
 import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import S from './Cart.module.css';
 
-function Cart() {
-  const { productsId } = useParams();
-  const { storageData } = useStorage('pocketbase_auth');
-  const [authUserData, setAuthUserData] = useState(storageData?.model);
-  useEffect(() => {
-    setAuthUserData(storageData?.model);
-  }, [storageData]);
-  console.log(authUserData);
-  console.log(productsId);
+async function Cart() {
+  const { productId } = useParams();
+  console.log(productId);
+
+  const commentUser = await pb.collection('cart').getFullList();
+  console.log(commentUser);
+
   return (
     <div className={S.cartWrapper}>
       <h1 className="sr-only">CHECKOUT</h1>
