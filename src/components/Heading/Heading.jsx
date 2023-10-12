@@ -8,6 +8,9 @@ function Heading() {
       <Link to="signin" className="text-white">
         Sign In
       </Link>
+      <Link to="signus" className="text-white">
+        Sign Us
+      </Link>
     </div>
   );
 }
