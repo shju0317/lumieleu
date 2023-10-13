@@ -23,7 +23,9 @@ function Signin() {
           </div>
         </div>
         <div className="flex-1 px-24 flex flex-col items-center justify-center bg-white z-10">
-          <h2 className="text-center text-7xl mb-16 text-[#454444]">Sign In</h2>
+          <h2 className="text-center text-7xl font-extralight mb-16 text-[#454444]">
+            Sign In
+          </h2>
           <form className="flex flex-col items-center gap-5">
             <div>
               <label htmlFor={id}></label>
