@@ -107,9 +107,9 @@ function SelectedProduct() {
             key={item.id}
             item={item}
             count={counts}
-            index={index}
+            index={index}/* 
             increaseCount={increaseCount}
-            decreaseCount={decreaseCount}
+            decreaseCount={decreaseCount} */
             deleteItem={deleteItem}
           />
         ))}
