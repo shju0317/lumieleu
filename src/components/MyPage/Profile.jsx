@@ -1,3 +1,5 @@
+import MyPageButton from './MyPageButton';
+
 function Profile() {
   return (
     <section className="flex justify-between border border-black rounded px-8 py-4 mx-auto max-w-3xl">
@@ -6,7 +8,7 @@ function Profile() {
         <img src="/public/profile.svg" alt="프로필" />
         <div>
           <p><strong>김회원</strong>님 안녕하세요!</p>
-          <button className="border border-black rounded px-7 py-1 mt-2">프로필 수정</button>
+          <MyPageButton text="프로필 수정"/>      
         </div>
       </div>
       <div className="flex border-l border-black gap-6 pl-10">
