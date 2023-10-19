@@ -2,9 +2,28 @@ import Button from '@/components/Button';
 import { useId } from 'react';
 import S from '@/pages/SignIn/SignIn.module.css';
 import I from '@/pages/SignUs/SignUs.module.css';
+// import {engReg, pwReg} from "@/utils/Validation";
+// import debounce from "@/utils/debounce";
+import { useEffect } from 'react';
+import { useState } from 'react';
+// import {useNavigate} from "react-router-dom";
 
 function SignUs() {
   const id = useId();
+  /* Input 사용자 입력 값 감지 */
+  const initalState = {
+    name: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
+  };
+  const [formState, setFormState] = useState(initalState);
+  const handleRegister = (e) => {
+    e.preventDefault();
+    // SDK인증요청
+    console.log('가입');
+  };
+
   return (
     <>
       <section className=" h-screen">
@@ -25,7 +44,11 @@ function SignUs() {
         </div>
         <div className=" w-1/2 float-right p-24 flex flex-col items-center justify-center bg-white z-10">
           <h2 className="text-2ㅍxl mb-8 text-[#454444]">회원가입</h2>
-          <form className={`${I.wrapper} flex flex-col items-center gap-1`}>
+          {/* input */}
+          <form
+            onSubmit={handleRegister}
+            className={`${I.wrapper} flex flex-col items-center gap-1`}
+          >
             <div className={I.inputWrapper}>
               <label htmlFor={id} className={I.label}>
                 아이디<span className="text-red-600"> *</span>
@@ -129,7 +152,8 @@ function SignUs() {
               <input type="checkbox" />
               <label>[선택] 이메일 수신을 동의하십니까?</label>
             </div>
-            <Button color="black" className="w-[25rem] my-5">
+
+            <Button type="submit" color="black" className="w-[25rem] my-5">
               가입하기
             </Button>
           </form>
