@@ -1,3 +1,19 @@
+.OrderWrapper {
+  @apply w-full h-full mt-11 flex flex-col items-center justify-start;
+}
+
+.OrderOrdererInfoTitle {
+  @apply mr-[48rem] text-[1.5rem] font-bold;
+}
+
+.OrderOrdererInfoWrapper {
+  @apply flex mr-[13rem] mb-16;
+}
+
+.OrderShippingAddress {
+  @apply mr-[48rem] text-[1.5rem] font-bold;
+}
+
 .OrderLine {
   @apply flex items-center w-[63.1875rem] mb-6 border border-black;
 }
@@ -8,7 +24,6 @@
 
 .LargeInput {
   @apply w-[25rem] h-[4.375rem] border border-gray-400 rounded-md;
-  @apply mb-16;
 }
 
 .MiddleInput {
@@ -21,4 +36,8 @@
 
 .BigInput {
   @apply w-[25rem] h-[6.25rem] border border-gray-400 rounded-md;
+}
+
+.validationFontStyle {
+  @apply pointer-events-none text-[9px] font-bold;
 }
