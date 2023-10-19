@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Spinner from '../Spinner';
 import { Link } from 'react-router-dom';
-import useStorage from '@/hooks/useStorage';
+// import useStorage from '@/hooks/useStorage';
 
 const PB = import.meta.env.VITE_PB_URL;
 const PB_CART_ENDPOINT = `${PB}/api/collections/cart/records`;
@@ -219,19 +219,6 @@ function SelectedProduct() {
         </li>
       </ul>
       <div>
-<<<<<<< HEAD
-        {selectedCartData?.toReversed().map((item, index) => (
-          <SelectedProductItem
-            key={item.id}
-            item={item}
-            count={counts}
-            index={index}/* 
-            increaseCount={increaseCount}
-            decreaseCount={decreaseCount} */
-            deleteItem={deleteItem}
-          />
-        ))}
-=======
         {selectedCartData?.toReversed().map((item, index) => {
           if (cartItems[index]) {
             const itemWithCount = { ...item, count: cartItems[index].count };
@@ -252,7 +239,6 @@ function SelectedProduct() {
             );
           }
         })}
->>>>>>> 3c9c4f329577ad5611b7642ba87da093f394781f
       </div>
       <div className="flex flex-col ml-[32rem] mb-10">
         <span className="text-[1.25rem] font-semibold">Cart Total</span>
