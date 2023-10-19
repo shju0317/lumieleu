@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Spinner from '../Spinner';
 import { Link } from 'react-router-dom';
+import useStorage from '@/hooks/useStorage';
 
 const PB = import.meta.env.VITE_PB_URL;
-const PB_CART_ENDPOINT = `${PB}/api/collections/cart/records?expand=selectedProductId`;
+const PB_CART_ENDPOINT = `${PB}/api/collections/cart/records`;
 
 async function fetchProducts() {
   const response = await axios(PB_CART_ENDPOINT);
@@ -15,9 +16,15 @@ async function fetchProducts() {
 }
 
 function SelectedProduct() {
-  // const { user } = useAuth();
+  // const { storageData } = useStorage('pocketbase_auth');
+  // const authUser = storageData?.model;
+
   const [selectedCartData, setSelectedCartData] = useState([]);
+  const [selectedCartUserDataId, setSelectedCartUserDataId] = useState([]);
   const [counts, setCounts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [productedTotalPrice, setProductedTotalPrice] = useState([]);
 
   const {
     isLoading,
@@ -40,16 +47,123 @@ function SelectedProduct() {
   useEffect(() => {
     if (!isLoading && Array.isArray(dataItems) && dataItems.length > 0) {
       const filteredData = dataItems.filter(
-        (item) => item.userName === '방서빈' //user.name // user.id
+        (item) => item.userName === '방서빈' //authUser.name // authUser.id
       );
-      console.log('filteredData:', filteredData);
+
       setSelectedCartData(filteredData);
+
+      if (filteredData.length > 0) {
+        const initialCartItems = filteredData.map((item) => ({
+          ...item,
+          count: item.selectedQuantity || 1,
+        }));
+        setCartItems(initialCartItems);
+      }
+      console.log('filteredData:', filteredData);
     }
   }, [isLoading, dataItems]);
 
+  const increaseCount = (index) => {
+    setCartItems((prevItems) => {
+      const newItems = [...prevItems];
+      newItems[index] = {
+        ...newItems[index],
+        count: newItems[index].count + 1,
+      };
+
+      const increaseCountTotalPrice =
+        newItems[index]?.selectedPrice * newItems[index].count;
+
+      setProductedTotalPrice((prevPrices) => {
+        const updatedPrices = [...prevPrices];
+        if (updatedPrices.length <= index) {
+          updatedPrices.push(increaseCountTotalPrice);
+        } else {
+          updatedPrices[index] = increaseCountTotalPrice;
+        }
+        console.log('increaseCountTotalPrice:', increaseCountTotalPrice);
+        console.log('productedTotalPrice:', productedTotalPrice);
+        console.log('cartItems:', cartItems);
+        console.log('newItems:', newItems);
+
+        return updatedPrices;
+      });
+
+      return newItems;
+    });
+  };
+
+  const decreaseCount = (index) => {
+    setCartItems((prevItems) => {
+      const newItems = [...prevItems];
+      newItems[index] = {
+        ...newItems[index],
+        count: newItems[index].count - 1,
+      };
+      console.log('cartItems:', cartItems);
+      console.log('newItems:', newItems);
+
+      const decreaseCountTotalPrice =
+        newItems[index].selectedPrice * newItems[index].count;
+      setProductedTotalPrice((prevPrices) => {
+        const updatedPrices = [...prevPrices];
+        if (updatedPrices.length <= index) {
+          updatedPrices.push(decreaseCountTotalPrice);
+        } else {
+          updatedPrices[index] = decreaseCountTotalPrice;
+        }
+        return updatedPrices;
+      });
+
+      return newItems;
+    });
+  };
+
+  useEffect(() => {
+    console.log('incrTotalPrice:', productedTotalPrice);
+  }, [productedTotalPrice]);
+
   useEffect(() => {
     console.log('selectedCartData:', selectedCartData);
+    if (Array.isArray(selectedCartData) && selectedCartData.length > 0) {
+      selectedCartData.forEach((item) => {
+        console.log('selectedCardDate ID:', item.id);
+        const userDataId = item.user;
+        setSelectedCartUserDataId(userDataId);
+        console.log('selected Cart User id:', item.user);
+      });
+    }
   }, [selectedCartData]);
+
+  useEffect(() => {
+    const initialCartItems = selectedCartData.map((item) => ({
+      ...item,
+      count: item.selectedQuantity || 1,
+    }));
+    setCartItems(initialCartItems);
+  }, [selectedCartData]);
+
+  const calculateTotalPrice = () => {
+    let calculatedTotalPrice = 0;
+
+    if (Array.isArray(cartItems) && cartItems.length > 0) {
+      cartItems.forEach((item) => {
+        const count = item.count || item.selectedQuantity || 1;
+        calculatedTotalPrice += item.selectedPrice * count;
+      });
+    }
+
+    return calculatedTotalPrice;
+  };
+
+  useEffect(() => {
+    const totalPrice = calculateTotalPrice();
+    setTotalPrice(totalPrice);
+  });
+
+  useEffect(() => {
+    console.log('Updated Total Price:', totalPrice);
+  }, [totalPrice]);
 
   const deleteItem = async (index) => {
     const itemId = selectedCartData[index].id;
@@ -82,7 +196,7 @@ function SelectedProduct() {
 
   return (
     <>
-      <h1 className="sr-only">CHECKOUT</h1>
+      <h2 className="sr-only">장바구니 페이지</h2>
       <span
         className="text-2xl font-bold mb-[4.5rem]"
         aria-label="장바구니"
@@ -105,15 +219,26 @@ function SelectedProduct() {
         </li>
       </ul>
       <div>
-        {selectedCartData?.toReversed().map((item, index) => (
-          <SelectedProductItem
-            key={item.id}
-            item={item}
-            count={counts}
-            index={index}
-            deleteItem={deleteItem}
-          />
-        ))}
+        {selectedCartData?.toReversed().map((item, index) => {
+          if (cartItems[index]) {
+            const itemWithCount = { ...item, count: cartItems[index].count };
+            const individualProductedTotalPrice =
+              productedTotalPrice.length > index
+                ? productedTotalPrice[index]
+                : cartItems[index].selectedSubtotal;
+            return (
+              <SelectedProductItem
+                key={item.id}
+                item={itemWithCount}
+                index={index}
+                deleteItem={deleteItem}
+                individualProductedTotalPrice={individualProductedTotalPrice}
+                increaseCount={() => increaseCount(index)}
+                decreaseCount={() => decreaseCount(index)}
+              />
+            );
+          }
+        })}
       </div>
       <div className="flex flex-col ml-[32rem] mb-10">
         <span className="text-[1.25rem] font-semibold">Cart Total</span>
@@ -123,11 +248,11 @@ function SelectedProduct() {
         <span className="text-[1rem] font-semibold">Total</span>
         <div className="w-[25rem] mb-6 border-t-2 border-black"></div>
         <div className="flex justify-end">
-          <span className="text-[1.5rem] font-semibold">2,000,000 원</span>
+          <span className="text-[1.5rem] font-semibold">{`${totalPrice}`}</span>
         </div>
       </div>
       <div className="ml-[32rem]">
-        <Link to="/lumieleu/order">
+        <Link to={`/lumieleu/order/${selectedCartUserDataId}`}>
           <button className="w-[25rem] h-[3.125rem] rounded-md text-white bg-black">
             PROCEEO TO CHECKOUT
           </button>
