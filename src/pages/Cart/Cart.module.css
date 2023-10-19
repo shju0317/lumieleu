@@ -1,0 +1,4 @@
+.cartWrapper {
+  @apply flex flex-col justify-center items-center;
+  @apply h-[calc(100vh-132px)] mx-auto md:min-w-[768px] overflow-y-scroll box-content md:h-[calc(100vh-132px)] min-w-[320px];
+}

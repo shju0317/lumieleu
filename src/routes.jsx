@@ -5,14 +5,21 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 
-const Home = lazy(() => import('./pages/Home/Home'));
-const RootLayout = lazy(() => import('./layout/RootLayout/RootLayout'));
+const RootLayout = lazy(() => import('@/layout/RootLayout/RootLayout'));
+const Home = lazy(() => import('@/pages/Home/Home'));
+const Cart = lazy(() => import('@/pages/Cart/Cart'));
+const Order = lazy(() => import('@/pages/Order/Order'));
+const SignIn = lazy(() => import('@/pages/SignIn/SignIn'));
+const SignUs = lazy(() => import('@/pages/SignUs/SignUs'));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<RootLayout />}>
+    <Route path="/lumieleu" element={<RootLayout />}>
       <Route index element={<Home />} />
-      <Route path="*" element={<Home />} />
+      <Route path="cart" element={<Cart />} />
+      <Route path="order/:userId" element={<Order />} />
+      <Route path="signin" element={<SignIn />} />
+      <Route path="signus" element={<SignUs />} />
     </Route>
   )
 );
