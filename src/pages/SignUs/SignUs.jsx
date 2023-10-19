@@ -7,8 +7,8 @@ function SignUs() {
   const id = useId();
   return (
     <>
-      <section className="flex flex-1 h-screen">
-        <div className="flex-1 p-24 bg-black text-white py-24 relative">
+      <section className=" h-screen">
+        <div className=" p-24 bg-black text-white w-1/2 h-screen py-24 fixed top-0 left-0">
           <p className="absolute bottom-48 left-7 text-6xl font-light">
             lumière de l'aube
           </p>
@@ -23,7 +23,7 @@ function SignUs() {
             <div className={S.solid}></div>
           </div>
         </div>
-        <div className="flex-1 p-24 flex flex-col items-center justify-center bg-white z-10">
+        <div className=" w-1/2 float-right p-24 flex flex-col items-center justify-center bg-white z-10">
           <h2 className="text-2ㅍxl mb-8 text-[#454444]">회원가입</h2>
           <form className={`${I.wrapper} flex flex-col items-center gap-1`}>
             <div className={I.inputWrapper}>
