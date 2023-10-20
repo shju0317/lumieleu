@@ -1,19 +1,25 @@
+import { getPbImageURL } from '@/utils';
 import MyPageButton from './MyPageButton';
+import { array } from 'prop-types';
 
-function OrderedProduct() {
+function OrderedProduct({ item }) {
   return (
     <div>
       <div className="flex justify-between text-sm px-1">
-        <p>주문번호 2023100408</p>
-        <p>주문일자 2023-10-10</p>
+        <p>주문번호 {item.id}</p>
+        <p>주문일자 {item.created}</p>
       </div>
       <div className="flex gap-4 justify-between items-center border border-black rounded px-6 py-4">
-        <div className="w-24 h-36 border">이미지</div>
+        <img
+          src={getPbImageURL(item, item.expand.product.image)}
+          alt={`${item.expand.product.title}`}
+          className="w-24 h-36 border"
+        />
         <dl className="text-sm">
-          <dt className="font-semibold text-base">상실의 시작</dt>
-          <dd>25,000원 / 1개</dd>
-          <dt className="font-semibold">받는사람</dt><dd>김회원</dd>
-          <dt className="font-semibold">받는주소</dt><dd>서울특별시 성동구 성수동 123-48</dd>
+          <dt className="font-semibold text-base">{item.expand.product.title}</dt>
+          <dd>{item.selectedTotal}원 / {item.selectedQuantity}개</dd>
+          <dt className="font-semibold">받는사람</dt><dd>{item.receiver}</dd>
+          <dt className="font-semibold">받는주소</dt><dd>{item.shippingAddress}</dd>
         </dl>
         <div className="">배송완료</div>
         <div className="flex flex-col gap-2">
@@ -24,5 +30,9 @@ function OrderedProduct() {
     </div>
   )
 }
+
+OrderedProduct.propTypes = {
+  item : array
+};
 
 export default OrderedProduct
