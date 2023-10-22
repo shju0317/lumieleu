@@ -17,7 +17,7 @@ const router = createBrowserRouter(
     <Route path="/lumieleu" element={<RootLayout />}>
       <Route index element={<Home />} />
       <Route path="cart" element={<Cart />} />
-      <Route path="order/:userId" element={<Order />} />
+      <Route path="order" element={<Order />} />
       <Route path="signin" element={<SignIn />} />
       <Route path="signus" element={<SignUs />} />
     </Route>
