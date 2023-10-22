@@ -20,8 +20,6 @@ import {
 } from '@/utils/validation';
 import S from './OrderList.module.css';
 
-import { useParams } from 'react-router-dom';
-
 const PB = import.meta.env.VITE_PB_URL;
 const PB_CART_ENDPOINT = `${PB}/api/collections/cart/records`;
 
@@ -31,17 +29,10 @@ async function fetchProducts() {
 }
 
 function OrderList() {
-const { userId } = useParams();
-console.log('userId:', userId);
   const navigate = useNavigate();
+  const authUserId = 'w0ngk55y58ddbqr';
 
   const [selectedCartData, setSelectedCartData] = useState([]);
-  const [saveUserId, setSaveUserId] = useState('');
-  
-  
-  useEffect(() => {
-    setSaveUserId(userId);
-  }, [userId]);
 
   const {
     isLoading,
@@ -77,7 +68,21 @@ console.log('userId:', userId);
   }, [isLoading, dataItems]);
 
   useEffect(() => {
-    if (saveUserId) {
+    const getCartData = async () => {
+      try {
+        selectedCartData.forEach((item) => {
+          console.log(item?.selectedSize)
+          console.log(item?.selectedQuantity);
+          console.log(item?.selectedTotal);
+        });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    getCartData();
+  }, [selectedCartData]);
+
+  useEffect(() => {
       const getCartId = async () => {
         try {
           const userData = await pb.collection('users').getFullList();
@@ -88,8 +93,7 @@ console.log('userId:', userId);
       };
 
       getCartId();
-    }
-  }, [saveUserId]);
+  }, []);
 
   // const userId = 인증 user id === cart user setUserId(userid)
   // const user = 인증 유저 id === cart 콜렉션의 user  // if 문으로 False / true 확인하여 노출

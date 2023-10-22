@@ -252,7 +252,7 @@ function SelectedProduct() {
         </div>
       </div>
       <div className="ml-[32rem]">
-        <Link to={`/lumieleu/order/${selectedCartUserDataId}`}>
+        <Link to={`/lumieleu/order`}>
           <button className="w-[25rem] h-[3.125rem] rounded-md text-white bg-black">
             PROCEEO TO CHECKOUT
           </button>
