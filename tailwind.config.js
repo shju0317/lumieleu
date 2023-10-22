@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        suit: ['serif'],
+        suit: ['serif', 'Noto Sans'],
       },
       colors: {
         /* Colors */
