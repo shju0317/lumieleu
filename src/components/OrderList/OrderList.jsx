@@ -20,8 +20,6 @@ import {
 } from '@/utils/validation';
 import S from './OrderList.module.css';
 
-import { useParams } from 'react-router-dom';
-
 const PB = import.meta.env.VITE_PB_URL;
 const PB_CART_ENDPOINT = `${PB}/api/collections/cart/records`;
 
@@ -31,17 +29,17 @@ async function fetchProducts() {
 }
 
 function OrderList() {
-const { userId } = useParams();
-console.log('userId:', userId);
   const navigate = useNavigate();
-
+  // const { storageData } = useStorage('pocketbase_auth');
+  // const authUser = storageData?.model;
+  const authUserId = 'w0ngk55y58ddbqr';
+  const [userData, setUserData] = useState([]);
   const [selectedCartData, setSelectedCartData] = useState([]);
   const [saveUserId, setSaveUserId] = useState('');
-  
-  
-  useEffect(() => {
+
+  /* useEffect(() => {
     setSaveUserId(userId);
-  }, [userId]);
+  }, [userId]); */
 
   const {
     isLoading,
@@ -68,28 +66,46 @@ console.log('userId:', userId);
       );
 
       if (filteredData.length > 0) {
-        const users = filteredData[0].user; // 첫 번째 항목의 user 값을 가져옴
-        console.log(users);
-
         setSelectedCartData(filteredData);
       }
     }
   }, [isLoading, dataItems]);
 
   useEffect(() => {
-    if (saveUserId) {
-      const getCartId = async () => {
-        try {
-          const userData = await pb.collection('users').getFullList();
-          console.log(userData);
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      };
+    const getCartData = async () => {
+      try {
+        selectedCartData.forEach((item) => {
+          console.log(item?.selectedSize)
+          console.log(item?.selectedQuantity);
+          console.log(item?.selectedTotal);
+        });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    getCartData();
+  }, [selectedCartData]);
 
-      getCartId();
-    }
-  }, [saveUserId]);
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const userData = await pb.collection('users').getFullList();
+        /* const filteredUserData = userData.filter(
+          (item) => item.id === authUserId
+        ); */
+        console.log('userData:', userData);
+        /* if (filteredUserData) {
+          console.log(filteredUserData[0]?.address);
+          console.log(filteredUserData[0]?.userEmail);
+          console.log(filteredUserData[0]?.name);
+          setSaveUserId(filteredUserData.id);
+        } */
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    getUserData();
+  }, []);
 
   // const userId = 인증 user id === cart user setUserId(userid)
   // const user = 인증 유저 id === cart 콜렉션의 user  // if 문으로 False / true 확인하여 노출
@@ -134,7 +150,9 @@ console.log('userId:', userId);
     formData.append('deliveryMessage', deliveryMessage);
 
     try {
-      await pb.collection('order').create(formData);
+      await pb.collection('orders').create({
+        ...formData
+      });
       toast.success('결제가 성공적으로 완료되었습니다', {
         ariaProps: {
           role: 'status',

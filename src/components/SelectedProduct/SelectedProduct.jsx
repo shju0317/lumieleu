@@ -25,6 +25,8 @@ function SelectedProduct() {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [productedTotalPrice, setProductedTotalPrice] = useState([]);
+  const [quantity, setQuantity] = useState([]);
+  const [cartDataId, setCartDataId] = useState([]);
 
   const {
     isLoading,
@@ -53,6 +55,7 @@ function SelectedProduct() {
       setSelectedCartData(filteredData);
 
       if (filteredData.length > 0) {
+        setCartDataId(filteredData[0].id);
         const initialCartItems = filteredData.map((item) => ({
           ...item,
           count: item.selectedQuantity || 1,
@@ -62,6 +65,10 @@ function SelectedProduct() {
       console.log('filteredData:', filteredData);
     }
   }, [isLoading, dataItems]);
+
+  useEffect(() => {
+    console.log(cartDataId);
+  }, [cartDataId]);
 
   const increaseCount = (index) => {
     setCartItems((prevItems) => {
@@ -94,12 +101,19 @@ function SelectedProduct() {
   };
 
   const decreaseCount = (index) => {
-    setCartItems((prevItems) => {
+    setCartItems(async (prevItems) => {
       const newItems = [...prevItems];
+      const newCount = newItems[index].count - 1;
       newItems[index] = {
         ...newItems[index],
-        count: newItems[index].count - 1,
+        count: newCount,
       };
+
+      setQuantity(newItems[index].count);
+      await pb.collection('cart').update(cartDataId, {
+        selectedQuantity: quantity,
+      });
+
       console.log('cartItems:', cartItems);
       console.log('newItems:', newItems);
 
@@ -252,7 +266,7 @@ function SelectedProduct() {
         </div>
       </div>
       <div className="ml-[32rem]">
-        <Link to={`/lumieleu/order/${selectedCartUserDataId}`}>
+        <Link to={`/lumieleu/order`}>
           <button className="w-[25rem] h-[3.125rem] rounded-md text-white bg-black">
             PROCEEO TO CHECKOUT
           </button>
