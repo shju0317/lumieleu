@@ -2,7 +2,7 @@
 export function ExchangeRefundInfo() {
   return (
     <>
-      <ul className="list-disc mx-4">
+      <ul className="list-disc mx-4 flex flex-col gap-2">
         <h3 className="font-bold mb-3">교환/반품이 가능한 경우</h3>
         <li>
           단순 변심, 착오 구매에 따른 교환/반품은 상품을 공급받은 날부터 7일
@@ -43,7 +43,7 @@ export function ExchangeRefundInfo() {
           고객센터를 통해 신청하실 수 있습니다.
         </li>
       </ul>
-      <ul className="list-disc mx-4">
+      <ul className="list-disc mx-4 flex flex-col gap-2">
         <h3 className="font-bold my-3">교환/반품이 불가능한 경우</h3>
         <li>
           비자에게 책임이 있는 사유로 재화등이 멸실되거나 훼손된 경우(재화의
@@ -74,17 +74,17 @@ export function OrderDeliveryInfo() {
   return (
     <>
       <dl>
-        <dt>배송지역</dt>
+        <dt className="font-bold my-3">배송지역</dt>
         <dd>
           전국 가능 (군부대 일부 지역은 제외), 제주도 및 도서산간 추가 비용 없음
         </dd>
-        <dt>배송기간</dt>
+        <dt className="font-bold my-3">배송기간</dt>
         <dd>
           입금 확인 후 2~4일 가량 소요되며, 지역별 택배업체 사정에 따라 약간의
-          차이가 있을 수 있습니다.연휴/공휴일 포함 주문 또는 일부
+          차이가 있을 수 있습니다. 연휴/공휴일 포함 주문 또는 일부
           도서지역/사서함 배송 주문은 2~3일 가량 추가 소요될 수 있습니다.
         </dd>
-        <dt>배송비</dt>
+        <dt className="font-bold my-3">배송비</dt>
         <dd>할인 적용 후 최종 결제금액 15,000원 이상 구매시 무료배송</dd>
         <dd>
           합산금액 15,000원 미만 주문시 배송비가 부과됩니다. (도서산간 지역
