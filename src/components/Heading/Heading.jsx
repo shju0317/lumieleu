@@ -33,8 +33,8 @@ function Heading() {
       )}
 
       {!isAuth && (
-        <Link to="signus" className="text-white">
-          Sign Us
+        <Link to="signUp" className="text-white">
+          Sign Up
         </Link>
       )}
 

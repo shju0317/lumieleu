@@ -54,7 +54,7 @@ const inputProps = [
   },
 ];
 
-function SignUs() {
+function SignUp() {
   /* Input 사용자 입력 값 감지 */
   const initalState = {
     username: '',
@@ -212,4 +212,4 @@ function SignUs() {
   );
 }
 
-export default SignUs;
+export default SignUp;
