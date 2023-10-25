@@ -5,7 +5,6 @@ import Spinner from '../Spinner';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Helmet } from 'react-helmet';
 // import useStorage from '@/hooks/useStorage';
 import {
   emailReg,
@@ -662,9 +661,6 @@ function OrderList() {
   }
   return (
     <>
-      <Helmet>
-        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-      </Helmet>
       <section className={S.OrderWrapper}>
         <h2 className="sr-only">주문 페이지</h2>
         <form onSubmit={handlePaymentEvent}>
