@@ -16,16 +16,7 @@ const authStore = (set) => ({
 
   /* Pb SDK를 사용한 회원가입 */
   signUp: async (registerUser) => {
-    try {
-      // 비동기 작업 수행
-      const response = await pb
-        .collection(USER_COLLECECTION)
-        .create(registerUser);
-      return response;
-    } catch (error) {
-      console.error(error);
-      throw new Error('회원가입에 실패했습니다. 입력한 정보를 확인해주세요.');
-    }
+    return await pb.collection(USER_COLLECECTION).create(registerUser);
   },
 
   /* Pb SDK를 사용한 로그인 */
@@ -43,7 +34,7 @@ const authStore = (set) => ({
         user: model,
         token,
       }),
-      true,
+      false,
       'auth/signin'
     );
 
@@ -82,30 +73,30 @@ const authStore = (set) => ({
   },
 
   /* Pb SDK를 사용한 카카오톡으로 로그인 */
-  SignWithKaKao: async () => {
-    const kakaoAuth = await pb
-      .collection(USER_COLLECECTION)
-      .authWithOAuth2({ provider: 'kakao' });
+  // SignWithKaKao: async () => {
+  //   const kakaoAuth = await pb
+  //     .collection(USER_COLLECECTION)
+  //     .authWithOAuth2({ provider: 'kakao' });
 
-    const { username: name, email, token } = kakaoAuth.meta;
+  //   const { username: name, email, token } = kakaoAuth.meta;
 
-    const updateUser = {
-      name,
-      username: email.split('@')[0],
-    };
+  //   const updateUser = {
+  //     name,
+  //     username: email.split('@')[0],
+  //   };
 
-    set((state) => ({
-      ...state,
-      isAuth: true,
-      user: updateUser,
-      token,
-    }));
-    await pb
-      .collection(USER_COLLECECTION)
-      .update(kakaoAuth.record.id, updateUser);
+  //   set((state) => ({
+  //     ...state,
+  //     isAuth: true,
+  //     user: updateUser,
+  //     token,
+  //   }));
+  //   await pb
+  //     .collection(USER_COLLECECTION)
+  //     .update(kakaoAuth.record.id, updateUser);
 
-    return kakaoAuth;
-  },
+  //   return kakaoAuth;
+  // },
 });
 const useAuthStore = create(persist(devtools(authStore), { name: 'auth' }));
 
