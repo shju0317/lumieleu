@@ -2,18 +2,19 @@ import Button from '@/components/Button';
 import S from '@/pages/SignIn/SignIn.module.css';
 import { engReg, pwReg } from '@/utils/validation';
 import debounce from '@/utils/debounce';
-// import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { FormInput } from '@/components/FormInput/FormInput';
-// import {useNavigate} from "react-router-dom";
+import useAuthStore from '@/store/store';
+import { useNavigate } from 'react-router-dom';
 
 // lable , input map 배열
 const inputProps = [
   {
     label: '아이디',
     placeholder: '아이디(영문)를 입력해 주세요',
-    name: 'id',
+    name: 'username',
   },
 
   {
@@ -44,7 +45,7 @@ const inputProps = [
   {
     label: '휴대전화',
     placeholder: '연락처를 입력해 주세요 ',
-    name: 'phone',
+    name: 'phoneNumber',
   },
   {
     label: '주소',
@@ -56,21 +57,28 @@ const inputProps = [
 function SignUs() {
   /* Input 사용자 입력 값 감지 */
   const initalState = {
-    id: '',
+    username: '',
     name: '',
     email: '',
     password: '',
     passwordConfirm: '',
-    phone: '',
+    phoneNumber: '',
     address: '',
   };
   const [formState, setFormState] = useState(initalState);
-  const { name, email, password, passwordConfirm } = formState;
+  const { name, username, password, passwordConfirm } = formState;
 
   // input의 onChange , 0.5초 이후에 리랜더링 되도록 debounce
   const handleInput = (e) => {
     const { name, value } = e.target;
-    setFormState({ ...formState, [name]: value });
+
+    // 전화번호 입력일 경우 하이픈 제거
+    if (name === 'phoneNumber') {
+      const phoneNumberWithoutHyphen = value.replace(/-/g, '');
+      setFormState({ ...formState, [name]: phoneNumberWithoutHyphen });
+    } else {
+      setFormState({ ...formState, [name]: value });
+    }
   };
   const handleDebounceInput = debounce(handleInput, 500);
 
@@ -78,8 +86,7 @@ function SignUs() {
   const validateSignUp = () => {
     if (!pwReg(password)) {
       toast.error(
-        '비밀번호는 10자리 이상, 14자리이하 하나의 알파벳 문자를 포함하는 특수문자를 입력해주세요!',
-        { icon: '😡' }
+        '비밀번호는 10자리 이상, 14자리이하 하나의 알파벳 문자를 포함하는 특수문자를 입력해주세요!'
       );
       throw new Error(
         '비밀번호는 10자리 이상, 14자리이하 하나의 알파벳 문자를 포함하는 특수문자를 입력해주세요!'
@@ -96,14 +103,35 @@ function SignUs() {
   };
 
   // 전송버튼 클릭시
-  const handleRegister = (e) => {
-    e.preventDefault();
-    // 비밀번호 일치하는지 확인
-    validateSignUp();
-
-    // SDK인증요청
-    console.log('가입');
+  const signUp = useAuthStore((state) => state.signUp);
+  const signIn = useAuthStore((state) => state.signIn);
+  const navigate = useNavigate();
+  const user = useAuthStore((state) => state.user);
+  const handleRegister = async (e) => {
+    try {
+      e.preventDefault();
+      // 비밀번호 일치하는지 확인
+      validateSignUp();
+      await signUp(formState);
+      await signIn(username, password);
+    } catch (error) {
+      console.error('Error during registration:', error);
+    }
+    console.log(formState);
   };
+
+  useEffect(() => {
+    if (user) {
+      toast.success(
+        `반갑습니다 ${name} 님! 회원가입이 완료되었습니다! 메인화면으로 이동합니다`,
+        {
+          icon: '🥳',
+          duration: 5000,
+        }
+      );
+      navigate('/lumieleu/');
+    }
+  }, [name, navigate, user]);
 
   return (
     <>
