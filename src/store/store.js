@@ -73,30 +73,30 @@ const authStore = (set) => ({
   },
 
   /* Pb SDK를 사용한 카카오톡으로 로그인 */
-  // SignWithKaKao: async () => {
-  //   const kakaoAuth = await pb
-  //     .collection(USER_COLLECECTION)
-  //     .authWithOAuth2({ provider: 'kakao' });
+  SignWithKaKao: async () => {
+    const kakaoAuth = await pb
+      .collection(USER_COLLECECTION)
+      .authWithOAuth2({ provider: 'kakao' });
 
-  //   const { username: name, email, token } = kakaoAuth.meta;
+    const { username: name, email, token } = kakaoAuth.meta;
 
-  //   const updateUser = {
-  //     name,
-  //     username: email.split('@')[0],
-  //   };
+    const updateUser = {
+      name,
+      username: email.split('@')[0],
+    };
 
-  //   set((state) => ({
-  //     ...state,
-  //     isAuth: true,
-  //     user: updateUser,
-  //     token,
-  //   }));
-  //   await pb
-  //     .collection(USER_COLLECECTION)
-  //     .update(kakaoAuth.record.id, updateUser);
+    set((state) => ({
+      ...state,
+      isAuth: true,
+      user: updateUser,
+      token,
+    }));
+    await pb
+      .collection(USER_COLLECECTION)
+      .update(kakaoAuth.record.id, updateUser);
 
-  //   return kakaoAuth;
-  // },
+    return kakaoAuth;
+  },
 });
 const useAuthStore = create(persist(devtools(authStore), { name: 'auth' }));
 

@@ -1,18 +1,75 @@
 import Button from '@/components/Button';
 import { useId } from 'react';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import S from './SignIn.module.css';
 import { toast } from 'react-hot-toast';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import useAuthStore from '@/store/store';
+import { useEffect } from 'react';
+import { userNameReg, pwReg } from '@/utils';
+import debounce from '@/utils/debounce';
 
 function Signin() {
-  /* Email과 Password 유효성 검사 및 조건부 렌더링 함수 */
+  const id = useId();
+  /* username Password 유효성 검사 및 조건부 렌더링 함수 */
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
 
-  const id = useId();
+  const [isUserNameValid, setIsUserNameValid] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const handleInput = debounce((e) => {
+    const { value, name } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    if (name === 'username') {
+      setIsUserNameValid(userNameReg(value));
+    } else if (name === 'password') {
+      setIsPasswordValid(pwReg(value));
+    }
+  });
+
+  /* PB Data 접근 및 해당 로그인 */
+  const navigate = useNavigate();
+  const signIn = useAuthStore((state) => state.signIn);
+  const user = useAuthStore((state) => state.user);
+
+  useEffect(() => {
+    if (user) {
+      toast.success(`${user.username}님 환영합니다.`, {
+        duration: 1000,
+      });
+      navigate('/lumieleu/');
+    }
+  }, [user]);
+
+  const handleSignIn = async (e) => {
+    try {
+      e.preventDefault();
+      const { username, password } = formData;
+      await signIn(username, password);
+    } catch (error) {
+      toast.error(
+        '로그인에 실패했습니다. 아이디와 패스워드를 다시 확인해주세요'
+      );
+      throw new Error(error);
+    }
+  };
+
+  /* 회원가입 페이지 이동 */
+  const handleMoveSignUp = () => {
+    navigate('/signUp');
+  };
+
+  /* KaKao 사용자 로그인 */
+  // const kakaoSignIn = useAuthStore((state) => state.SignWithKaKao);
+  // const handleSigninKakao = async () => {
+  //   await kakaoSignIn();
+  // };
+
   return (
     <>
       <section className="flex flex-1 h-screen">
@@ -54,13 +111,21 @@ function Signin() {
                 className="border w-[25rem] h-[3.125rem] pl-5"
               />
             </div>
-            <Button color="black" className="w-[25rem]">
-              가입하기
+            <Button color="black" className="w-[25rem]" onClick={handleSignIn}>
+              로그인
             </Button>
-            <Button color="white" className="w-[25rem]">
+            <Button
+              color="white"
+              className="w-[25rem]"
+              // onClick={handleSigninKakao}
+            >
               카카오 로그인
             </Button>
-            <Button color="white" className="w-[25rem]">
+            <Button
+              color="white"
+              className="w-[25rem]"
+              onClick={handleMoveSignUp}
+            >
               회원가입
             </Button>
           </form>

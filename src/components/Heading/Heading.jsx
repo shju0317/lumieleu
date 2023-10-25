@@ -6,7 +6,7 @@ import useAuthStore from '@/store/store';
 function Heading() {
   /* 인증 정보에 따른 로그인 ➡️ 로그아웃으로 변경 */
   const isAuth = useAuthStore((state) => state.isAuth);
-  console.log(isAuth);
+  // console.log(isAuth);
 
   /* 로그인 시 userName || name렌더링 */
   const user = useAuthStore((state) => state.user);
@@ -23,7 +23,7 @@ function Heading() {
     <div className={S.headingWrapper}>
       <h1 className="text-white">헤더</h1>
       {isAuth ? (
-        <div className="text-white" onClick={handleSignOut}>
+        <div className="text-white cursor-pointer" onClick={handleSignOut}>
           로그아웃
         </div>
       ) : (
@@ -33,7 +33,7 @@ function Heading() {
       )}
 
       {!isAuth && (
-        <Link to="signUp" className="text-white">
+        <Link to="signup" className="text-white">
           Sign Up
         </Link>
       )}
