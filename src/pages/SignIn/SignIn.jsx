@@ -1,8 +1,17 @@
 import Button from '@/components/Button';
 import { useId } from 'react';
+import { useRef, useState } from 'react';
 import S from './SignIn.module.css';
+import { toast } from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Signin() {
+  /* Email과 Password 유효성 검사 및 조건부 렌더링 함수 */
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
   const id = useId();
   return (
     <>
