@@ -1,4 +1,3 @@
-import pb from '@/api/pocketbase';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { getPbImageURL } from '@/utils';
@@ -15,8 +14,6 @@ function SelectedProductItem({
   deleteItem,
   individualProductedTotalPrice,
 }) {
-  console.log('item:', item);
-
   return (
     <>
       <ul className="flex">
@@ -78,7 +75,6 @@ SelectedProductItem.propTypes = {
   decreaseCount: PropTypes.func.isRequired,
   increaseCount: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
-  itemIndex: PropTypes.number.isRequired,
   deleteItem: PropTypes.func.isRequired,
   individualProductedTotalPrice: PropTypes.number.isRequired,
   item: PropTypes.shape({

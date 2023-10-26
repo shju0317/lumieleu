@@ -114,14 +114,13 @@ function OrderList() {
   });
 
   let dataItems = cartData?.items || [];
-  console.log('dataItems:', dataItems);
 
-  if (Array.isArray(dataItems) && dataItems.length > 0) {
+  /* if (Array.isArray(dataItems) && dataItems.length > 0) {
     dataItems.forEach((item) => {
       const userId = item.user;
       console.log('item userId:', userId);
     });
-  }
+  } */
 
   useEffect(() => {
     if (!isLoading && Array.isArray(dataItems) && dataItems.length > 0) {
@@ -141,21 +140,16 @@ function OrderList() {
         const fullUserData = await pb.collection('users').getFullList();
 
         const fullUserDataItems = fullUserData.map((item) => {
-          const userId = item.id;
-          console.log('full userId:', userId);
           return item;
         });
 
         const filetedUserDataItems = fullUserDataItems.filter(
           (item) => item.id === 'w0ngk55y58ddbqr' //authUser.name // authUser.id
         );
-
+        
         setUserDataItems(filetedUserDataItems);
 
         if (filetedUserDataItems && filetedUserDataItems.length > 0) {
-          console.log(filetedUserDataItems[0]?.address);
-          console.log(filetedUserDataItems[0]?.userEmail);
-          console.log(filetedUserDataItems[0]?.name);
           setSaveUserId(filetedUserDataItems.id);
         }
       } catch (error) {
@@ -389,7 +383,6 @@ function OrderList() {
       }));
     }
   };
-  console.log('formState:', formState);
 
   const validateEmail = (email) => {
     return emailReg(email);

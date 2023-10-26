@@ -36,14 +36,12 @@ function SelectedProduct() {
   });
 
   let dataItems = cartData?.items || [];
-  console.log('dataItems:', dataItems);
 
-  if (Array.isArray(dataItems) && dataItems.length > 0) {
+  /* if (Array.isArray(dataItems) && dataItems.length > 0) {
     dataItems.forEach((item) => {
       const userName = item.userName;
-      console.log('userName:', userName);
     });
-  }
+  } */
 
   useEffect(() => {
     if (!isLoading && Array.isArray(dataItems) && dataItems.length > 0) {
@@ -52,7 +50,6 @@ function SelectedProduct() {
       );
 
       setSelectedCartData(filteredData);
-      console.log('selectedCartData:', selectedCartData);
 
       if (filteredData.length > 0) {
         const initialCartItems = filteredData.map((item) => ({
@@ -61,7 +58,6 @@ function SelectedProduct() {
         }));
         setCartItems(initialCartItems);
       }
-      console.log('filteredData:', filteredData);
     }
   }, [isLoading, dataItems]);
 
@@ -74,22 +70,15 @@ function SelectedProduct() {
     const increaseCountTotalPrice =
       currentCartItem.selectedPrice * updatedCount;
 
-    console.log('increaseCountTotalPrice:', increaseCountTotalPrice);
-
     const updatedCartItem = {
       ...currentCartItem,
       count: updatedCount,
       selectedSubtotal: increaseCountTotalPrice,
     };
 
-    console.log('updatedCartItem id:', updatedCartItem.id);
-    console.log('updatedCartItem:', updatedCartItem);
-
     setCartItems((prevItems) => {
       const newItems = [...prevItems];
       newItems[reverseIndex] = updatedCartItem;
-
-      console.log('newItems:', newItems);
 
       return newItems;
     });
@@ -108,18 +97,8 @@ function SelectedProduct() {
         }
       });
 
-      console.log('updatedPrices:', updatedPrices);
-
       return updatedPrices;
     });
-
-    console.log(cartItems[itemIndex].count);
-
-    const currentItemID = cartItems[itemIndex]?.id;
-    console.log('index id:', currentItemID);
-
-    const cartId = cartItems[reverseIndex].id;
-    console.log('reverseIndex id:', cartId);
   };
 
   const decreaseCount = async (itemIndex) => {
@@ -144,8 +123,6 @@ function SelectedProduct() {
       const newItems = [...prevItems];
       newItems[reverseIndex] = updatedCartItem;
 
-      console.log('newItems:', newItems); // Correct placement for console.log
-
       return newItems;
     });
 
@@ -163,8 +140,6 @@ function SelectedProduct() {
         }
       });
 
-      console.log('updatedPrices:', updatedPrices);
-
       return updatedPrices;
     });
   };
@@ -174,13 +149,10 @@ function SelectedProduct() {
   }, [productedTotalPrice]);
 
   useEffect(() => {
-    console.log('selectedCartData:', selectedCartData);
     if (Array.isArray(selectedCartData) && selectedCartData.length > 0) {
       selectedCartData.forEach((item) => {
-        console.log('selectedCardDate ID:', item.id);
         const userDataId = item.user;
         setSelectedCartUserDataId(userDataId);
-        console.log('selected Cart User id:', item.user);
       });
     }
   }, [selectedCartData]);
@@ -239,13 +211,10 @@ function SelectedProduct() {
 
     if (!currentCartItem || !currentCartItem.id) {
       console.log('Error: Item or item id is undefined.');
-      console.log('cartItems:', cartItems);
-      console.log('currentCartItem:', currentCartItem);
       return;
     }
 
     const itemId = currentCartItem.id;
-    console.log('delete itemId:', itemId);
 
     await pb.collection('cart').delete(itemId);
 
