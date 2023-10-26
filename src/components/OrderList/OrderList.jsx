@@ -31,6 +31,7 @@ async function fetchProducts() {
 
 function OrderList() {
   const navigate = useNavigate();
+
   // const { storageData } = useStorage('pocketbase_auth');
   // const authUser = storageData?.model;
   const authUserId = 'w0ngk55y58ddbqr';
@@ -104,6 +105,9 @@ function OrderList() {
       setNewAddress('');
     }
   };
+  const authUserId = 'w0ngk55y58ddbqr';
+
+  const [selectedCartData, setSelectedCartData] = useState([]);
 
   const {
     isLoading,
@@ -157,7 +161,6 @@ function OrderList() {
       }
     };
     getUserData();
-  }, []);
 
   // const userId = 인증 user id === cart user setUserId(userid)
   // const user = 인증 유저 id === cart 콜렉션의 user  // if 문으로 False / true 확인하여 노출
