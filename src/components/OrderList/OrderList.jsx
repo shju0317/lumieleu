@@ -158,6 +158,7 @@ function OrderList() {
       }
     };
     getUserData();
+  })
 
   // const userId = 인증 user id === cart user setUserId(userid)
   // const user = 인증 유저 id === cart 콜렉션의 user  // if 문으로 False / true 확인하여 노출
