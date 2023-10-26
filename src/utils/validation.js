@@ -5,6 +5,11 @@ export function emailReg(text) {
   return RegExr.test(String(text).toLowerCase());
 }
 
+export function shippingPostCodeReg(text) {
+  const RegExr = /^\d{5}$/;
+  return RegExr.test(text);
+}
+
 export function shippingAddressReg(text) {
   const RegExr = /^[가-힣\d\s]{2,100}$/;
   return RegExr.test(String(text).toLowerCase());
