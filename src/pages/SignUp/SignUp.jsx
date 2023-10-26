@@ -122,13 +122,9 @@ function SignUp() {
 
   useEffect(() => {
     if (user) {
-      toast.success(
-        `반갑습니다 ${name} 님! 회원가입이 완료되었습니다! 메인화면으로 이동합니다`,
-        {
-          icon: '🥳',
-          duration: 5000,
-        }
-      );
+      toast.success(`반갑습니다 ${name} 님! 회원가입이 완료되었습니다. `, {
+        duration: 1000,
+      });
       navigate('/lumieleu/');
     }
   }, [name, navigate, user]);

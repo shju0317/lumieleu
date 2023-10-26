@@ -46,9 +46,11 @@ function Signin() {
     }
   }, [user]);
 
-  const handleSignIn = async (e) => {
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+
     try {
-      e.preventDefault();
       const { username, password } = formData;
       await signIn(username, password);
     } catch (error) {
@@ -92,10 +94,15 @@ function Signin() {
           <h2 className="text-center text-7xl font-extralight mb-16 text-[#454444]">
             Sign In
           </h2>
-          <form className="flex flex-col items-center gap-5">
+          <form
+            onSubmit={onSubmit}
+            className="flex flex-col items-center gap-5"
+          >
             <div>
               <label htmlFor={id}></label>
               <input
+                onChange={handleInput}
+                name="username"
                 id={id}
                 type="text"
                 placeholder="아이디를 입력해 주세요"
@@ -105,21 +112,29 @@ function Signin() {
             <div>
               <label htmlFor={id}></label>
               <input
+                onChange={handleInput}
+                name="password"
                 id={id}
                 type="text"
                 placeholder="비밀번호를 입력해 주세요"
                 className="border w-[25rem] h-[3.125rem] pl-5"
               />
+              {!isPasswordValid && (
+                <span className="text-red-600">
+                  <br></br>
+                  비밀번호는 10자 이상, 특수문자 하나이상을 입력해 주세요!
+                </span>
+              )}
             </div>
-            <Button color="black" className="w-[25rem]" onClick={handleSignIn}>
+            <Button type="submit" color="black" className="w-[25rem]">
               로그인
             </Button>
             <Button
               color="white"
-              className="w-[25rem]"
+              className="w-[25rem] bg-[#FEE500] border-none"
               // onClick={handleSigninKakao}
             >
-              카카오 로그인
+              카카오톡 로그인
             </Button>
             <Button
               color="white"
