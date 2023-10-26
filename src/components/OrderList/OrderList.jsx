@@ -147,7 +147,7 @@ function OrderList() {
         const filetedUserDataItems = fullUserDataItems.filter(
           (item) => item.id === 'w0ngk55y58ddbqr' //authUser.name // authUser.id
         );
-        
+
         setUserDataItems(filetedUserDataItems);
 
         if (filetedUserDataItems && filetedUserDataItems.length > 0) {
@@ -158,6 +158,7 @@ function OrderList() {
       }
     };
     getUserData();
+  });
 
   // const userId = 인증 user id === cart user setUserId(userid)
   // const user = 인증 유저 id === cart 콜렉션의 user  // if 문으로 False / true 확인하여 노출
@@ -323,9 +324,9 @@ function OrderList() {
         shippingPostCode: value,
       }));
     } else if (name === 'shippingAddress') {
-       if (!sameAsMember) {
-         onChangeShippingAddress(e);
-       }
+      if (!sameAsMember) {
+        onChangeShippingAddress(e);
+      }
       setFormState((prevState) => ({
         ...prevState,
         shippingAddress: value,
