@@ -105,9 +105,6 @@ function OrderList() {
       setNewAddress('');
     }
   };
-  const authUserId = 'w0ngk55y58ddbqr';
-
-  const [selectedCartData, setSelectedCartData] = useState([]);
 
   const {
     isLoading,
