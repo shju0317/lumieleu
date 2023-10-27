@@ -3,11 +3,13 @@ import MyPageButton from './MyPageButton';
 import { array } from 'prop-types';
 
 function OrderedProduct({ item }) {
+  let orderDate = item.created.split(" ")[0];
+  
   return (
     <div>
       <div className="flex justify-between text-sm px-1">
         <p>주문번호 {item.id}</p>
-        <p>주문일자 {item.created}</p>
+        <p>주문일자 {orderDate}</p>
       </div>
       <div className="flex gap-4 justify-between items-center border border-black rounded px-6 py-4">
         <img
