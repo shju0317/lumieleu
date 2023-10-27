@@ -164,7 +164,7 @@ function OrderList() {
   // const user = 인증 유저 id === cart 콜렉션의 user  // if 문으로 False / true 확인하여 노출
 
   const [formState, setFormState] = useState({
-    email: userDataItems[0]?.email || '',
+    email: userDataItems[0]?.userEmail || '',
     userName: userDataItems[0]?.userName || '',
     shippingPostCode: '',
     shippingAddress: userDataItems[0]?.address || '',
@@ -181,7 +181,6 @@ function OrderList() {
   useEffect(() => {
     setFormState((prevState) => ({
       ...prevState,
-      shippingAddress: userDataItems[0]?.address || '',
       email: userDataItems[0]?.userEmail || '',
       userName: userDataItems[0]?.name || '',
     }));
@@ -384,7 +383,6 @@ function OrderList() {
       }));
     }
   };
-
   const validateEmail = (email) => {
     return emailReg(email);
   };
