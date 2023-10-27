@@ -25,7 +25,7 @@ function OrderedProductList() {
     );
   }
 
-  // return <>{orderedList.map((item) => console.log(item.id))}</>
+  // return <>{orderedList.map((item) => console.log(item.expand.order[0]))}</>
   return <>{orderedList.map((item)=> <OrderedProduct key={item.id} item={item}/>)}</>
 }
 

@@ -4,6 +4,7 @@ import { array } from 'prop-types';
 
 function OrderedProduct({ item }) {
   let orderDate = item.created.split(" ")[0];
+  // console.log(item.expand.order[0].id)
   
   return (
     <div>

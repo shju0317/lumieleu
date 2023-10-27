@@ -3,7 +3,18 @@ import { useQuery } from '@tanstack/react-query';
 
 function useOrderedProduct() {
   // const userInfo = pb.authStore.model;
+
   const userId = 'dmadsf8349efnev';
+
+  // async function fetchOrderedProduct() {
+  //   const order = await pb.collection('users').getFullList({
+  //     filter: `id = '${userId}'`,
+  //     expand: 'order',
+  //     // sort: '-date'
+  //   });
+
+  //   return order;
+  // }
 
   async function fetchOrderedProduct() {
     const order = await pb.collection('orders').getFullList({
