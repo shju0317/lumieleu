@@ -5,13 +5,15 @@ import pb from '@/api/pocketbase';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
+import 'swiper/css/navigation';
 
 import {
   Mousewheel,
-  // Autoplay,
   FreeMode,
   Pagination,
-  // Navigation,
+  Navigation,
+  Scrollbar,
+  Keyboard,
 } from 'swiper/modules';
 
 function ProductList() {
@@ -23,7 +25,7 @@ function ProductList() {
         const ProductListData = await pb.collection('products').getFullList();
         setProductList(ProductListData);
       } catch (error) {
-        throw new Error('Error fetching place list');
+        throw new Error('Error fetching product list');
       }
     };
     getHomeList();
@@ -42,13 +44,25 @@ function ProductList() {
   return (
     <Swiper
       slidesPerView="auto"
-      // spaceBetween={}
+      // spaceBetween={40}
       mousewheel={true}
+      navigation={true}
       freeMode={true}
+      keyboard={true}
       pagination={{
-        clickable: true,
+        type: 'progressbar',
       }}
-      modules={[Mousewheel, Pagination, FreeMode]}
+      scrollbar={{
+        hide: true,
+      }}
+      modules={[
+        Scrollbar,
+        Mousewheel,
+        Pagination,
+        Navigation,
+        FreeMode,
+        Keyboard,
+      ]}
       className={`${S.swiper}`}
       // centeredSlides={1}
       onSlideChange={handleSlideChange}
@@ -72,6 +86,8 @@ function ProductList() {
           DE LAUBE
         </span>
       </SwiperSlide>
+      {/* <div className={`${S.swiper-button-prev}`}></div>
+      <div className={`${S.swiper-button-prev}`}></div> */}
     </Swiper>
   );
 }
