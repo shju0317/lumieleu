@@ -1,7 +1,9 @@
+import IndexPage from '@/components/home/IndexPage';
+
 function Home() {
   return (
-    <section>
-      <span>Home</span>
+    <section className="relative" id="container">
+      <IndexPage />
     </section>
   );
 }

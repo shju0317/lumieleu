@@ -18,7 +18,8 @@ function App() {
             <Suspense
               fallback={<Spinner size={200} message="페이지 로딩 중..." />}
             >
-              <RouterProvider router={router}></RouterProvider>
+              <RouterProvider router={router}>
+              </RouterProvider>
             </Suspense>
           </div>
           <Toaster />
