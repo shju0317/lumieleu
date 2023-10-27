@@ -12,7 +12,14 @@ function Heading() {
         location.pathname === '/lumieleu/' ? S.textWhite : ''
       }`}
     >
-      <Link to="/lumieleu/">로고</Link>
+      <Link
+        to="/lumieleu/"
+        className={`text-xs text-center ${
+          location.pathname === '/lumieleu/' ? `` : `font-bold`
+        }`}
+      >
+        lumière <br /> de l&#39;aube
+      </Link>
       <Nav className={location.hash === '#home' ? S.navTextWhite : ''} />
     </div>
   );
