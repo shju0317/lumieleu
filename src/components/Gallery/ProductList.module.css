@@ -10,10 +10,10 @@
 }
 
 .swiperSlide:nth-child(n) {
-  @apply w-[280px] ml-10;
+  @apply w-[280px] ml-[40px];
 }
 .swiperSlide:nth-child(1) {
-  @apply w-[400px] h-[700px];
+  @apply w-[400px] h-[700px] ml-[40px];
 }
 
 .swiperSlide:nth-last-child(1) {
@@ -21,4 +21,11 @@
   @apply flex items-center justify-center;
   @apply ml-0;
   /* @apply -translate-y-[33px]; */
+}
+.swiper-button-prev {
+  left: 10px;
+}
+
+.swiper-button-next {
+  right: 10px;
 }
