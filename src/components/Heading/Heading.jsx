@@ -1,16 +1,26 @@
+import Nav from '@/layout/Nav/Nav';
 import S from './Heading.module.css';
+import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 function Heading() {
+  const location = useLocation();
+
   return (
-    <div className={S.headingWrapper}>
-      <h1 className="text-white">헤더</h1>
-      <Link to="signin" className="text-white">
-        Sign In
+    <div
+      className={`${S.headingWrapper} ${
+        location.pathname === '/lumieleu/' ? S.textWhite : ''
+      }`}
+    >
+      <Link
+        to="/lumieleu/"
+        className={`text-xs text-center ${
+          location.pathname === '/lumieleu/' ? `` : `font-bold`
+        }`}
+      >
+        lumière <br /> de l&#39;aube
       </Link>
-      <Link to="signus" className="text-white">
-        Sign Us
-      </Link>
+      <Nav className={location.hash === '#home' ? S.navTextWhite : ''} />
     </div>
   );
 }
