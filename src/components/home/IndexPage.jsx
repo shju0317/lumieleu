@@ -42,7 +42,7 @@ function IndexPage() {
         </p>
       </div>
       <div className={`${S.goGallery} ${isMouseMoving ? S.moveUp : ''}`}>
-        <Link to="/lumieleu/#gallery" className="font-serif text-2xl">
+        <Link to="/lumieleu/gallery" className="font-serif text-2xl">
           상실의 시작 작품 보러가기
           <br />
           <span>&#8744;</span>
