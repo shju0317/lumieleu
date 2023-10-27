@@ -5,14 +5,11 @@ import { Link } from 'react-router-dom';
 
 function Heading() {
   const location = useLocation();
-  if (location.hash === '#home') {
-    localStorage.setItem('visitedPlaceOrMap', 'true');
-  }
 
   return (
     <div
       className={`${S.headingWrapper} ${
-        location.hash === '#home' ? S.textWhite : ''
+        location.pathname === '/lumieleu/' ? S.textWhite : ''
       }`}
     >
       <Link to="/lumieleu/">로고</Link>
