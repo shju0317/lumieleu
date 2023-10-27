@@ -1,5 +1,6 @@
 import OrderExchange from '@/components/ProductDetails/OrderExchange';
 import untitle from './untitle.jpg';
+import QuantityCheck from '@/components/ProductDetails/QuantityCheck';
 
 export default function ProductDetails() {
   // 제품 정보 데이터
@@ -23,17 +24,18 @@ export default function ProductDetails() {
       {/* 제품 설명 및 상세 정보 */}
       <section className="w-[322px] h-[573px] flex flex-col">
         {/* 제품 설명 */}
-        <article className="mb-20 flex-grow">
-          우리는 끝을 두려워할 필요도 없다. 끝에는 다시 시작이 있을 것이니.
-          시작의 끝은 상실이지만 상실의 끝 또한 시작이다.
+        <article className="h-[322px] flex-grow text-justify">
+          가로등 아래 노을이 서서히 물들어가네 어둠을 밝히며 도시의 잠들 시간을
+          알린다 노을 도시의 풍경이 서서히 변해가는데 가로등은 노을과 함께 빛을
+          드리운다 도시의 잠들 시간을 알리며 그 소중한 순간을 함께 간직하고 싶어
         </article>
 
         {/* 제품 상세 정보 */}
         <section className="mb-4">
           {/* 제목 */}
-          <h2 className="border-b-2 border-gray-600 mb-2 pb-2">Untitle</h2>
+          <h3 className="border-b-2 border-gray-600 mb-2 pb-2">Untitle</h3>
 
-          {/* 가격, 사이즈, 재질 등의 정보를 반복적으로 표시 */}
+          {/* 가격, 사이즈, 재질 등의 정보 표시 */}
           {productInfo.map((info) => (
             <dl
               key={info.label}
@@ -45,14 +47,8 @@ export default function ProductDetails() {
           ))}
         </section>
         <p className="font-semibold">Untitle</p>
-        <div className="flex justify-between mb-4">
-          <span className="flex gap-2 p-1">
-            <button>-</button>
-            <p>1</p>
-            <button>+</button>
-          </span>
-          <span>KRW 24,000</span>
-        </div>
+        {/* 수량 체크 */}
+        <QuantityCheck />
         <div className="flex gap-2">
           <button className="bg-black text-white w-[220px] h-[50px] rounded-md">
             구매하기
@@ -61,7 +57,8 @@ export default function ProductDetails() {
             장바구니
           </button>
         </div>
-        <div className="flex gap-11 justify-center mt-10">
+        <div className="flex gap-11 justify-center">
+          {/* 교환 / 주문 모달 창 */}
           <OrderExchange />
         </div>
       </section>
