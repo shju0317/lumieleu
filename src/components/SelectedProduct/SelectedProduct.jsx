@@ -21,7 +21,7 @@ function SelectedProduct() {
 
   const [selectedCartData, setSelectedCartData] = useState([]);
   const [selectedCartUserDataId, setSelectedCartUserDataId] = useState([]);
-  const [counts, setCounts] = useState([]);
+
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [productedTotalPrice, setProductedTotalPrice] = useState([]);
@@ -145,10 +145,6 @@ function SelectedProduct() {
   };
 
   useEffect(() => {
-    console.log('incrTotalPrice:', productedTotalPrice);
-  }, [productedTotalPrice]);
-
-  useEffect(() => {
     if (Array.isArray(selectedCartData) && selectedCartData.length > 0) {
       selectedCartData.forEach((item) => {
         const userDataId = item.user;
@@ -187,10 +183,6 @@ function SelectedProduct() {
     setTotalPrice(totalPrice);
   });
 
-  useEffect(() => {
-    console.log('Updated Total Price:', totalPrice);
-  }, [totalPrice]);
-
   const deleteItem = async (itemIndex) => {
     const reverseIndex = cartItems.length - 1 - itemIndex;
 
@@ -203,7 +195,6 @@ function SelectedProduct() {
 
     if (reverseIndex >= updatedCartItems.length || reverseIndex < 0) {
       console.log('Error: Item does not exist in cartItems.');
-      console.log('updatedCartItems:', updatedCartItems);
       return;
     }
 
@@ -218,14 +209,11 @@ function SelectedProduct() {
 
     await pb.collection('cart').delete(itemId);
 
-    let updatedCounts = [...counts];
-    updatedCounts.splice(reverseIndex, 1);
 
     let updatedCartData = [...selectedCartData];
     updatedCartData.splice(reverseIndex, 1);
 
     setCartItems(updatedCartItems);
-    setCounts(updatedCounts);
     setSelectedCartData(updatedCartData);
   };
 
