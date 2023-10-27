@@ -229,6 +229,11 @@ function SelectedProduct() {
       </div>
     );
   }
+
+  function isCart() {
+    return selectedCartData.length === 0 ? false : true;
+  }
+
   return (
     <>
       <h2 className="sr-only">장바구니 페이지</h2>
@@ -309,8 +314,11 @@ function SelectedProduct() {
         </div>
       </div>
       <div className="ml-[32rem]">
-        <Link to={`/lumieleu/order`}>
-          <button className="w-[25rem] h-[3.125rem] mb-[5rem] rounded-md text-white bg-black">
+        <Link to={selectedCartData.length === 0 ? '/lumieleu/cart' : '/lumieleu/order'}>
+          <button
+            className={`text-white bg-black
+              w-[25rem] h-[3.125rem] mb-[5rem] rounded-md`}
+          >
             PROCEEO TO CHECKOUT
           </button>
         </Link>
