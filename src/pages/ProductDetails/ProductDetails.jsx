@@ -1,6 +1,7 @@
 import OrderExchange from '@/components/ProductDetails/OrderExchange';
 import untitle from './untitle.jpg';
 import QuantityCheck from '@/components/ProductDetails/QuantityCheck';
+import { Link } from 'react-router-dom';
 
 export default function ProductDetails() {
   // 제품 정보 데이터
@@ -50,12 +51,16 @@ export default function ProductDetails() {
         {/* 수량 체크 */}
         <QuantityCheck />
         <div className="flex gap-2">
-          <button className="bg-black text-white w-[220px] h-[50px] rounded-md">
-            구매하기
-          </button>
-          <button className="border-2 border-black rounded-md w-[120px] h-[50px]">
-            장바구니
-          </button>
+          <Link to={`/lumieleu/order`}>
+            <button className="bg-black text-white w-[220px] h-[50px] rounded-md">
+              구매하기
+            </button>
+          </Link>
+          <Link to={`/lumieleu/cart`}>
+            <button className="border-2 border-black rounded-md w-[105px] h-[50px]">
+              장바구니
+            </button>
+          </Link>
         </div>
         <div className="flex gap-11 justify-center">
           {/* 교환 / 주문 모달 창 */}
