@@ -66,7 +66,7 @@ function Signin() {
 
   /* 회원가입 페이지 이동 */
   const handleMoveSignUp = () => {
-    navigate('/signUp');
+    navigate('/lumieleu/signUp');
   };
 
   /* Eye Component 상태에 따른 비밀번호 보이기/보이지 않기 */
@@ -164,7 +164,7 @@ function Signin() {
               className="w-[25rem]"
               onClick={handleMoveSignUp}
             >
-              <Link to="/lumieleu/signUp">회원가입</Link>
+              회원가입
             </Button>
           </form>
         </div>
