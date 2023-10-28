@@ -14,7 +14,7 @@ function Heading() {
   /* 일반사용자 로그아웃 및 카카오 사용자 로그아웃 */
   const signOut = useAuthStore((state) => state.signOut);
   const handleSignOut = () => {
-    toast.success('정상적으로 로그아웃 되었습니다.');
+    toast.success('정상적으로 로그아웃 되었습니다.', { duration: 1000 });
     signOut();
     // kakaoLogout();
   };

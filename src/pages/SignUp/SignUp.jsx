@@ -86,18 +86,20 @@ function SignUp() {
   const validateSignUp = () => {
     if (!pwReg(password)) {
       toast.error(
-        '비밀번호는 10자리 이상, 14자리이하 하나의 알파벳 문자를 포함하는 특수문자를 입력해주세요!'
+        '비밀번호는 10자리 이상, 14자리이하 하나의 알파벳 문자를 포함하는 특수문자를 입력해주세요!',
+        { duration: 1000 }
       );
       throw new Error(
-        '비밀번호는 10자리 이상, 14자리이하 하나의 알파벳 문자를 포함하는 특수문자를 입력해주세요!'
+        '비밀번호는 10자리 이상, 14자리이하 하나의 알파벳 문자를 포함하는 특수문자를 입력해주세요!',
+        { duration: 1000 }
       );
     }
     if (name === 'name' && !engReg(name)) {
-      toast.error('닉네임은 영문으로만 입력해주세요!', { icon: '😡' });
+      toast.error('닉네임은 영문으로만 입력해주세요!', { duration: 1000 });
       throw new Error('닉네임은 영문으로만 입력해주세요!');
     }
     if (password !== passwordConfirm) {
-      toast.error('비밀번호가 일치하지 않습니다!', { icon: '😡' });
+      toast.error('비밀번호가 일치하지 않습니다!', { duration: 1000 });
       throw new Error('비밀번호가 일치하지 않습니다!');
     }
   };
