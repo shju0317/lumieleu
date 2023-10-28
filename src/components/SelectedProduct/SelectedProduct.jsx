@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Spinner from '../Spinner';
 import { Link } from 'react-router-dom';
+// import useStorage from '@/hooks/useStorage';
 
 const PB = import.meta.env.VITE_PB_URL;
-const PB_CART_ENDPOINT = `${PB}/api/collections/cart/records?expand=selectedProductId`;
+const PB_CART_ENDPOINT = `${PB}/api/collections/cart/records`;
 
 async function fetchProducts() {
   const response = await axios(PB_CART_ENDPOINT);
@@ -15,9 +16,16 @@ async function fetchProducts() {
 }
 
 function SelectedProduct() {
-  // const { user } = useAuth();
+  // const { storageData } = useStorage('pocketbase_auth');
+  // const authUser = storageData?.model;
+
   const [selectedCartData, setSelectedCartData] = useState([]);
-  const [counts, setCounts] = useState([]);
+  const [selectedCartUserDataId, setSelectedCartUserDataId] = useState([]);
+
+  const [cartItems, setCartItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [productedTotalPrice, setProductedTotalPrice] = useState([]);
+  const [reverseIndex, setReverseIndex] = useState([]);
 
   const {
     isLoading,
@@ -28,42 +36,184 @@ function SelectedProduct() {
   });
 
   let dataItems = cartData?.items || [];
-  console.log('dataItems:', dataItems);
 
-  if (Array.isArray(dataItems) && dataItems.length > 0) {
+  /* if (Array.isArray(dataItems) && dataItems.length > 0) {
     dataItems.forEach((item) => {
       const userName = item.userName;
-      console.log('userName:', userName);
     });
-  }
+  } */
 
   useEffect(() => {
     if (!isLoading && Array.isArray(dataItems) && dataItems.length > 0) {
       const filteredData = dataItems.filter(
-        (item) => item.userName === '방서빈' //user.name // user.id
+        (item) => item.userName === '방서빈' //authUser.name // authUser.id
       );
-      console.log('filteredData:', filteredData);
+
       setSelectedCartData(filteredData);
+
+      if (filteredData.length > 0) {
+        const initialCartItems = filteredData.map((item) => ({
+          ...item,
+          count: item.selectedQuantity || 1,
+        }));
+        setCartItems(initialCartItems);
+      }
     }
   }, [isLoading, dataItems]);
 
+  const increaseCount = async (itemIndex) => {
+    const reverseIndex = cartItems.length - 1 - itemIndex;
+    setReverseIndex(reverseIndex);
+
+    const currentCartItem = cartItems[reverseIndex];
+    const updatedCount = currentCartItem.count + 1;
+    const increaseCountTotalPrice =
+      currentCartItem.selectedPrice * updatedCount;
+
+    const updatedCartItem = {
+      ...currentCartItem,
+      count: updatedCount,
+      selectedSubtotal: increaseCountTotalPrice,
+    };
+
+    setCartItems((prevItems) => {
+      const newItems = [...prevItems];
+      newItems[reverseIndex] = updatedCartItem;
+
+      return newItems;
+    });
+
+    await pb.collection('cart').update(updatedCartItem.id, {
+      selectedQuantity: updatedCartItem.count,
+      selectedSubtotal: increaseCountTotalPrice,
+    });
+
+    setProductedTotalPrice((prevPrices) => {
+      const updatedPrices = prevPrices.map((price, index) => {
+        if (index === itemIndex) {
+          return increaseCountTotalPrice;
+        } else {
+          return price;
+        }
+      });
+
+      return updatedPrices;
+    });
+  };
+
+  const decreaseCount = async (itemIndex) => {
+    const reverseIndex = cartItems.length - 1 - itemIndex;
+    const currentCartItem = cartItems[reverseIndex];
+
+    if (currentCartItem.count <= 1) {
+      return;
+    }
+
+    const updatedCount = currentCartItem.count - 1;
+    const increaseCountTotalPrice =
+      currentCartItem.selectedPrice * updatedCount;
+
+    const updatedCartItem = {
+      ...currentCartItem,
+      count: updatedCount,
+      selectedSubtotal: increaseCountTotalPrice,
+    };
+
+    setCartItems((prevItems) => {
+      const newItems = [...prevItems];
+      newItems[reverseIndex] = updatedCartItem;
+
+      return newItems;
+    });
+
+    await pb.collection('cart').update(updatedCartItem.id, {
+      selectedQuantity: updatedCartItem.count,
+      selectedSubtotal: increaseCountTotalPrice,
+    });
+
+    setProductedTotalPrice((prevPrices) => {
+      const updatedPrices = prevPrices.map((price, index) => {
+        if (index === itemIndex) {
+          return increaseCountTotalPrice;
+        } else {
+          return price;
+        }
+      });
+
+      return updatedPrices;
+    });
+  };
+
   useEffect(() => {
-    console.log('selectedCartData:', selectedCartData);
+    if (Array.isArray(selectedCartData) && selectedCartData.length > 0) {
+      selectedCartData.forEach((item) => {
+        const userDataId = item.user;
+        setSelectedCartUserDataId(userDataId);
+      });
+    }
   }, [selectedCartData]);
 
-  const deleteItem = async (index) => {
-    const itemId = selectedCartData[index].id;
-    console.log(itemId);
+  useEffect(() => {
+    const initialCartItems = selectedCartData.map((item) => ({
+      ...item,
+      count: item.selectedQuantity || 1,
+    }));
+    setCartItems(initialCartItems);
+  }, [selectedCartData]);
+
+  useEffect(() => {
+    console.log(cartItems);
+  });
+
+  const calculateTotalPrice = () => {
+    let calculatedTotalPrice = 0;
+
+    if (Array.isArray(cartItems) && cartItems.length > 0) {
+      cartItems.forEach((item) => {
+        const count = item.count || item.selectedQuantity || 1;
+        const selectedPrice = item.selectedPrice || 0;
+        calculatedTotalPrice += selectedPrice * count;
+      });
+    }
+    return calculatedTotalPrice;
+  };
+
+  useEffect(() => {
+    const totalPrice = calculateTotalPrice();
+    setTotalPrice(totalPrice);
+  });
+
+  const deleteItem = async (itemIndex) => {
+    const reverseIndex = cartItems.length - 1 - itemIndex;
+
+    if (reverseIndex < 0 || reverseIndex >= selectedCartData.length) {
+      console.log('Error: Reverse index is out of range.');
+      return;
+    }
+
+    const updatedCartItems = [...cartItems];
+
+    if (reverseIndex >= updatedCartItems.length || reverseIndex < 0) {
+      console.log('Error: Item does not exist in cartItems.');
+      return;
+    }
+
+    const currentCartItem = updatedCartItems[reverseIndex];
+
+    if (!currentCartItem || !currentCartItem.id) {
+      console.log('Error: Item or item id is undefined.');
+      return;
+    }
+
+    const itemId = currentCartItem.id;
 
     await pb.collection('cart').delete(itemId);
 
-    let updatedCounts = [...counts];
-    updatedCounts.splice(index, 1);
 
     let updatedCartData = [...selectedCartData];
-    updatedCartData.splice(index, 1);
+    updatedCartData.splice(reverseIndex, 1);
 
-    setCounts(updatedCounts);
+    setCartItems(updatedCartItems);
     setSelectedCartData(updatedCartData);
   };
 
@@ -80,24 +230,28 @@ function SelectedProduct() {
     );
   }
 
+  function isCart() {
+    return selectedCartData.length === 0 ? false : true;
+  }
+
   return (
     <>
-      <h1 className="sr-only">CHECKOUT</h1>
+      <h2 className="sr-only">장바구니 페이지</h2>
       <span
-        className="text-2xl font-bold mb-[4.5rem]"
+        className="text-2xl font-bold mt-[10rem] mb-[4.5rem]"
         aria-label="장바구니"
         aria-hidden
       >
         C H E C K O U T
       </span>
       <ul className="w-[930px] flex pb-2">
-        <li className="mr-[38.5rem]">
+        <li className="ml-2 mr-[37.5rem]">
           <span className="font-semibold">Product</span>
         </li>
-        <li className="mr-7">
+        <li className="mr-9">
           <span className="font-semibold">Price</span>
         </li>
-        <li className="mr-7">
+        <li className="mr-9">
           <span className="font-semibold">Quantity</span>
         </li>
         <li>
@@ -105,17 +259,48 @@ function SelectedProduct() {
         </li>
       </ul>
       <div>
-        {selectedCartData?.toReversed().map((item, index) => (
-          <SelectedProductItem
-            key={item.id}
-            item={item}
-            count={counts}
-            index={index}
-            deleteItem={deleteItem}
-          />
-        ))}
+        {dataItems.length <= 0 ? (
+          <>
+            <div className="w-[960px] border-t-2 border-black ml-6"></div>
+            <div className="h-[20rem] flex flex-col justify-center items-center">
+              <span>장바구니가 비어있습니다.</span>
+            </div>
+          </>
+        ) : (
+          <>
+            {cartItems?.toReversed().map((item, index) => {
+              const cartItem = cartItems.find(
+                (cartItem) => cartItem.id === item.id
+              );
+              if (cartItem) {
+                const itemWithCount = {
+                  ...item,
+                  count: cartItem.count,
+                };
+                const reverseIndex = cartItems.length - 1 - index;
+                const individualProductedTotalPrice =
+                  productedTotalPrice.length > reverseIndex
+                    ? productedTotalPrice[reverseIndex]
+                    : cartItem.selectedSubtotal;
+                return (
+                  <SelectedProductItem
+                    key={item.id}
+                    item={itemWithCount}
+                    index={index}
+                    deleteItem={deleteItem}
+                    individualProductedTotalPrice={
+                      individualProductedTotalPrice
+                    }
+                    increaseCount={() => increaseCount(index)}
+                    decreaseCount={() => decreaseCount(index)}
+                  />
+                );
+              }
+            })}
+          </>
+        )}
       </div>
-      <div className="flex flex-col ml-[32rem] mb-10">
+      <div className="flex flex-col ml-[32rem] mt-10 mb-10">
         <span className="text-[1.25rem] font-semibold">Cart Total</span>
         <div className="w-[25rem] border-t-2 border-black"></div>
         <span className="text-[1rem] font-semibold">Subtotal</span>
@@ -123,12 +308,17 @@ function SelectedProduct() {
         <span className="text-[1rem] font-semibold">Total</span>
         <div className="w-[25rem] mb-6 border-t-2 border-black"></div>
         <div className="flex justify-end">
-          <span className="text-[1.5rem] font-semibold">2,000,000 원</span>
+          <span className="text-[1.5rem] font-semibold">
+            {`${totalPrice.toLocaleString('ko-KR')}`} 원
+          </span>
         </div>
       </div>
       <div className="ml-[32rem]">
-        <Link to="/lumieleu/order">
-          <button className="w-[25rem] h-[3.125rem] rounded-md text-white bg-black">
+        <Link to={selectedCartData.length === 0 ? '/lumieleu/cart' : '/lumieleu/order'}>
+          <button
+            className={`text-white bg-black
+              w-[25rem] h-[3.125rem] mb-[5rem] rounded-md`}
+          >
             PROCEEO TO CHECKOUT
           </button>
         </Link>

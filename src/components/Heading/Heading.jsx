@@ -1,4 +1,6 @@
+import Nav from '@/layout/Nav/Nav';
 import S from './Heading.module.css';
+import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import useAuthStore from '@/store/store';
@@ -19,28 +21,35 @@ function Heading() {
     // kakaoLogout();
   };
 
+  const location = useLocation();
+
   return (
-    <div className={S.headingWrapper}>
-      <h1 className="text-white">헤더</h1>
-      {isAuth ? (
-        <div className="text-white cursor-pointer" onClick={handleSignOut}>
+    <div
+      className={`${S.headingWrapper} ${
+        location.pathname === '/lumieleu/' ? S.textWhite : ''
+      }`}
+    >
+      <Link
+        to="/lumieleu/"
+        className={`text-xs text-center ${
+          location.pathname === '/lumieleu/' ? `` : `font-bold`
+        }`}
+      >
+        lumière <br /> de l&#39;aube
+      </Link>
+      <Nav className={location.hash === '#home' ? S.navTextWhite : ''} />
+
+      {/* {isAuth ? (
+        <div className=" cursor-pointer" onClick={handleSignOut}>
           로그아웃
         </div>
       ) : (
-        <Link to="signin" className="text-white">
-          Sign In
-        </Link>
+        <Link to="signin">Sign In</Link>
       )}
 
-      {!isAuth && (
-        <Link to="signup" className="text-white">
-          Sign Up
-        </Link>
-      )}
+      {!isAuth && <Link to="signup">Sign Up</Link>}
 
-      {isAuth && user && (
-        <li className="text-white">{user.name || user.username}님</li>
-      )}
+      {isAuth && user && <li>{user.name || user.username}님</li>} */}
     </div>
   );
 }
