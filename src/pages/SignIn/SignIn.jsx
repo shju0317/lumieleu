@@ -3,7 +3,7 @@ import { useId } from 'react';
 import { useState } from 'react';
 import S from './SignIn.module.css';
 import { toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import useAuthStore from '@/store/store';
 import { useEffect } from 'react';
 import { userNameReg, pwReg } from '@/utils';
@@ -164,7 +164,7 @@ function Signin() {
               className="w-[25rem]"
               onClick={handleMoveSignUp}
             >
-              회원가입
+              <Link to="/lumieleu/signUp">회원가입</Link>
             </Button>
           </form>
         </div>

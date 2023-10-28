@@ -133,7 +133,7 @@ function SignUp() {
 
   return (
     <>
-      <section className=" h-screen">
+      <section className=" h-screen mb-[66px]">
         {/* 왼쪽영역 */}
         <div className=" p-24 overflow-hidden bg-black text-white w-1/2 h-screen py-24 fixed top-0 left-0">
           <p className="absolute bottom-48 left-7 text-6xl font-light">
