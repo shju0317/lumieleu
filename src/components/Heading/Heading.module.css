@@ -1,7 +1,7 @@
 .headingWrapper {
   @apply min-w-[320px] h-[66px] w-full;
   @apply flex items-center justify-between py-6 mx-auto px-9;
-  @apply fixed z-10;
+  @apply fixed z-20;
 }
 .textWhite {
   @apply text-white;
