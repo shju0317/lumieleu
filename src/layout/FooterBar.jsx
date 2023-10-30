@@ -1,5 +1,11 @@
+import Footer from '@/components/Footer/Footer';
+
 function FooterBar() {
-  return <footer>푸터 입니다</footer>;
-}
+    return (
+      <footer className="flex justify-around text-xs ">
+        <Footer />
+      </footer>
+    );
+  }
 
 export default FooterBar;
