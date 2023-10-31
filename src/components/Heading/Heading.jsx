@@ -20,7 +20,7 @@ function Heading() {
       >
         lumière <br /> de l&#39;aube
       </Link>
-      <Nav className={location.hash === '#home' ? S.navTextWhite : ''} />
+      <Nav />
     </div>
   );
 }
