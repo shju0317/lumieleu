@@ -12,7 +12,7 @@ function FooterBar() {
   }
 
   return (
-    <footer className="flex justify-around text-xs py-[30px] ali">
+    <footer className="flex justify-around text-xs py-[30px] ali border-t-2">
       <p className="font-bold text-center ">
         lumière <br /> de l&#39;aube
       </p>
