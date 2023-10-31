@@ -1,7 +1,16 @@
 import { Link } from 'react-router-dom';
 import gitImg from '/git.svg';
+import { useLocation } from 'react-router-dom';
 
 function FooterBar() {
+  const location = useLocation();
+  switch (location.pathname) {
+    case '/lumieleu/':
+      return null;
+
+    default:
+  }
+
   return (
     <footer className="flex justify-around text-xs py-[30px] ali">
       <p className="font-bold text-center ">
