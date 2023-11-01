@@ -22,6 +22,7 @@ function Heading() {
   );
 
   return (
+
     <div className={S.headingWrapper}>
       <div className={`${S.logoSection} ${logoSectionClass}`}>
         <Link
@@ -34,6 +35,7 @@ function Heading() {
       <div className={`${S.navSection} ${navSectionCalss}`}>
         <Nav />
       </div>
+
     </div>
   );
 }
