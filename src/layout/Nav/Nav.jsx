@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import useAuthStore from '@/store/store';
 import React from 'react';
+import CSS from './Nav.module.css';
 
 function Nav() {
   const location = useLocation();
@@ -24,6 +25,18 @@ function Nav() {
     // kakaoLogout();
   };
 
+  const activeClass = (category) => {
+    if (location.pathname === `/lumieleu/`) {
+      return `${CSS.hoverunderbarWhite}`;
+    } else {
+      return `${
+        location.pathname.toUpperCase().includes(category) ? CSS.underbar : ''
+      } ${CSS.hoverunderbar}`;
+    }
+  };
+
+  // const hoverClass = 0;
+
   return (
     <nav>
       <ul className="flex flex-wrap gap-5 justify-evenly border-gray-1 top-13">
@@ -34,11 +47,7 @@ function Nav() {
             <li key={category} className="">
               <Link
                 to={`/lumieleu/${category.toLowerCase()}`}
-                className={` py-2  ${
-                  location.pathname.toUpperCase().includes(category)
-                    ? 'border-b-4 pb-1 box-border border-black '
-                    : ''
-                } `}
+                className={activeClass(category)}
               >
                 {category}
               </Link>
@@ -51,11 +60,13 @@ function Nav() {
             <React.Fragment key={category}>
               {isAuth && user && <li>{user.name} 님</li>}
               {isAuth ? (
-                <div className="cursor-pointer" onClick={handleSignOut}>
-                  로그아웃
+                <div className={activeClass(category)} onClick={handleSignOut}>
+                  LOGOUT
                 </div>
               ) : (
-                <Link to="signin">LOGIN</Link>
+                <Link to="signin" className={activeClass(category)}>
+                  LOGIN
+                </Link>
               )}
             </React.Fragment>
           ))}
