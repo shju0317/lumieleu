@@ -15,6 +15,7 @@ const ProductDetails = lazy(() =>
   import('@/pages/ProductDetails/ProductDetails')
 );
 const Gallery = lazy(() => import('@/pages/Gallery/GalleryPage'));
+const About = lazy(() => import('@/pages/About/About'));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
       <Route path="signus" element={<SignUs />} />
       <Route path="productdetails" element={<ProductDetails />} />
       <Route path="gallery" element={<Gallery />} />
+      <Route path="about" element={<About />} />
     </Route>
   )
 );
