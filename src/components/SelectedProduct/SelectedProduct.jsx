@@ -1,65 +1,72 @@
+import { useQuery } from '@tanstack/react-query';
 import pb from '@/api/pocketbase';
 import SelectedProductItem from '@/components/SelectedProductItem/SelectedProductItem';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import Spinner from '../Spinner';
 import { Link } from 'react-router-dom';
-// import useStorage from '@/hooks/useStorage';
-
-const PB = import.meta.env.VITE_PB_URL;
-const PB_CART_ENDPOINT = `${PB}/api/collections/cart/records`;
-
-async function fetchProducts() {
-  const response = await axios(PB_CART_ENDPOINT);
-  return await response.data;
-}
+import useStorage from '@/hooks/useStorage';
 
 function SelectedProduct() {
-  // const { storageData } = useStorage('pocketbase_auth');
-  // const authUser = storageData?.model;
+  const { storageData } = useStorage('pocketbase_auth');
+  const [authUserData, setAuthUserData] = useState(storageData?.model);
+
+  useEffect(() => {
+    setAuthUserData(storageData?.model);
+  }, [storageData?.model]);
+
+  const authUserDataId = authUserData?.id;
+
+  async function fetchCartData() {
+    const userCartData = await pb.collection('cart').getFullList({
+      filter: `user = '${authUserDataId}'`,
+      expand: 'user, product',
+      requestKey: null,
+    });
+
+    return userCartData;
+  }
 
   const [selectedCartData, setSelectedCartData] = useState([]);
-  const [selectedCartUserDataId, setSelectedCartUserDataId] = useState([]);
-
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [productedTotalPrice, setProductedTotalPrice] = useState([]);
   const [reverseIndex, setReverseIndex] = useState([]);
 
+
   const {
     isLoading,
     data: cartData,
     error,
-  } = useQuery(['cart'], fetchProducts, {
+  } = useQuery(['cart'], () => fetchCartData(), {
     retry: 2,
   });
 
-  let dataItems = cartData?.items || [];
+  let dataItems = cartData || [];
 
-  /* if (Array.isArray(dataItems) && dataItems.length > 0) {
-    dataItems.forEach((item) => {
-      const userName = item.userName;
-    });
-  } */
-
+  console.log('cartData:', cartData);
+  console.log('dataItems:', dataItems);
   useEffect(() => {
-    if (!isLoading && Array.isArray(dataItems) && dataItems.length > 0) {
-      const filteredData = dataItems.filter(
-        (item) => item.userName === '방서빈' //authUser.name // authUser.id
-      );
-
-      setSelectedCartData(filteredData);
-
-      if (filteredData.length > 0) {
-        const initialCartItems = filteredData.map((item) => ({
+    const updateFilteredData = () => {
+      if (dataItems && dataItems.length > 0) {
+        const initialCartItems = dataItems.map((item) => ({
           ...item,
-          count: item.selectedQuantity || 1,
+          count: item.selectedQuantity === 0 ? 1 : item.selectedQuantity,
         }));
         setCartItems(initialCartItems);
+        setSelectedCartData(initialCartItems);
+
+        console.log('Updating cartItems...');
+        console.log('cartItems:', initialCartItems);
       }
+    };
+    if (!isLoading) {
+      updateFilteredData();
     }
-  }, [isLoading, dataItems]);
+  }, [cartData, setCartItems, setSelectedCartData, dataItems]);
+
+  useEffect(() => {
+    console.log('cartItems:', cartItems);
+  });
 
   const increaseCount = async (itemIndex) => {
     const reverseIndex = cartItems.length - 1 - itemIndex;
@@ -145,25 +152,12 @@ function SelectedProduct() {
   };
 
   useEffect(() => {
-    if (Array.isArray(selectedCartData) && selectedCartData.length > 0) {
-      selectedCartData.forEach((item) => {
-        const userDataId = item.user;
-        setSelectedCartUserDataId(userDataId);
-      });
-    }
-  }, [selectedCartData]);
-
-  useEffect(() => {
     const initialCartItems = selectedCartData.map((item) => ({
       ...item,
       count: item.selectedQuantity || 1,
     }));
     setCartItems(initialCartItems);
   }, [selectedCartData]);
-
-  useEffect(() => {
-    console.log(cartItems);
-  });
 
   const calculateTotalPrice = () => {
     let calculatedTotalPrice = 0;
@@ -209,13 +203,16 @@ function SelectedProduct() {
 
     await pb.collection('cart').delete(itemId);
 
-
     let updatedCartData = [...selectedCartData];
     updatedCartData.splice(reverseIndex, 1);
 
     setCartItems(updatedCartItems);
     setSelectedCartData(updatedCartData);
   };
+
+  useEffect(() => {
+    console.log('selectedCartData:', selectedCartData);
+  });
 
   if (isLoading) {
     return <Spinner size={160} title="데이터 가져오는 중이에요." />;
@@ -230,15 +227,11 @@ function SelectedProduct() {
     );
   }
 
-  function isCart() {
-    return selectedCartData.length === 0 ? false : true;
-  }
-
   return (
     <>
       <h2 className="sr-only">장바구니 페이지</h2>
       <span
-        className="text-2xl font-bold mt-[10rem] mb-[4.5rem]"
+        className="text-[20px] font-bold mt-[10rem] mb-[4.5rem]"
         aria-label="장바구니"
         aria-hidden
       >
@@ -259,7 +252,7 @@ function SelectedProduct() {
         </li>
       </ul>
       <div>
-        {dataItems.length <= 0 ? (
+        {cartItems.length === 0 && !isLoading ? (
           <>
             <div className="w-[960px] border-t-2 border-black ml-6"></div>
             <div className="h-[20rem] flex flex-col justify-center items-center">
@@ -277,6 +270,11 @@ function SelectedProduct() {
                   ...item,
                   count: cartItem.count,
                 };
+                const {
+                  expand: { product, ...restExpand },
+                } = itemWithCount;
+                console.log('product:', product);
+                console.log('restExpand:', restExpand);
                 const reverseIndex = cartItems.length - 1 - index;
                 const individualProductedTotalPrice =
                   productedTotalPrice.length > reverseIndex
@@ -285,7 +283,9 @@ function SelectedProduct() {
                 return (
                   <SelectedProductItem
                     key={item.id}
-                    item={itemWithCount}
+                    filteredItem={itemWithCount}
+                    restExpandItem={restExpand}
+                    expandProduct={product}
                     index={index}
                     deleteItem={deleteItem}
                     individualProductedTotalPrice={
@@ -301,20 +301,24 @@ function SelectedProduct() {
         )}
       </div>
       <div className="flex flex-col ml-[32rem] mt-10 mb-10">
-        <span className="text-[1.25rem] font-semibold">Cart Total</span>
+        <span className="text-[20px] font-semibold">Cart Total</span>
         <div className="w-[25rem] border-t-2 border-black"></div>
-        <span className="text-[1rem] font-semibold">Subtotal</span>
+        <span className="text-[16px] font-semibold">Subtotal</span>
         <div className="w-[25rem] border-t-2 border-black"></div>
-        <span className="text-[1rem] font-semibold">Total</span>
+        <span className="text-[16px] font-semibold">Total</span>
         <div className="w-[25rem] mb-6 border-t-2 border-black"></div>
         <div className="flex justify-end">
-          <span className="text-[1.5rem] font-semibold">
+          <span className="text-[20px] font-semibold">
             {`${totalPrice.toLocaleString('ko-KR')}`} 원
           </span>
         </div>
       </div>
       <div className="ml-[32rem]">
-        <Link to={selectedCartData.length === 0 ? '/lumieleu/cart' : '/lumieleu/order'}>
+        <Link
+          to={
+            selectedCartData.length === 0 ? '/lumieleu/cart' : '/lumieleu/order'
+          }
+        >
           <button
             className={`text-white bg-black
               w-[25rem] h-[3.125rem] mb-[5rem] rounded-md`}

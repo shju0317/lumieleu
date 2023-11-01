@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 function Footer() {
   return (
-    <footer className="flex justify-around text-xs ">
+    <footer className="flex justify-around text-xs">
       <p className="font-bold text-center">
         lumière <br /> de l&#39;aube
       </p>

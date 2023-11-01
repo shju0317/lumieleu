@@ -10,7 +10,7 @@ function Heading() {
     <div
       className={`${S.headingWrapper} ${
         location.pathname === '/lumieleu/' ? S.textWhite : ''
-      }`}
+      } `}
     >
       <Link
         to="/lumieleu/"
