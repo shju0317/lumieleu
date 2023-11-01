@@ -52,11 +52,9 @@ function ProductList() {
 
     if (activeIndex >= 7 && activeIndex < swiper.slides.length - 2) {
       swiper.slideTo(swiper.slides.length - 1);
-    } else if (activeIndex === 9) {
+    } else if (activeIndex === swiper.slides.length - 2) {
       swiper.slideTo(6);
     } else if (activeIndex === swiper.slides.length - 1) {
-      // 마지막 페이지인 경우
-      // 원을 작동시키는 코드 추가
       if (circleRef.current) {
         circleRef.current.classList.add(S.active); // 작동을 나타내는 클래스 추가
       }
@@ -68,30 +66,29 @@ function ProductList() {
     }
   };
 
+  const swiperParms = {
+    slidesPerView: 'auto',
+    mousewheel: true,
+    navigation: true,
+    freeMode: true,
+    keyboard: true,
+    scrollbar: {
+      hide: true,
+    },
+    modules: [
+      Scrollbar,
+      Mousewheel,
+      Pagination,
+      Navigation,
+      FreeMode,
+      Keyboard,
+    ],
+  };
+
   return (
     <Swiper
-      slidesPerView="auto"
-      // spaceBetween={40}
-      mousewheel={true}
-      navigation={true}
-      freeMode={true}
-      keyboard={true}
-      pagination={{
-        type: 'progressbar',
-      }}
-      scrollbar={{
-        hide: true,
-      }}
-      modules={[
-        Scrollbar,
-        Mousewheel,
-        Pagination,
-        Navigation,
-        FreeMode,
-        Keyboard,
-      ]}
+      {...swiperParms}
       className={`${S.swiper}`}
-      // centeredSlides={1}
       onSlideChange={handleSlideChange}
     >
       <SwiperSlide className={`${S.swiperSlide}`}>
