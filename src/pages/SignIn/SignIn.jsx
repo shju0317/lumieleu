@@ -66,7 +66,7 @@ function Signin() {
 
   /* 회원가입 페이지 이동 */
   const handleMoveSignUp = () => {
-    navigate('/lumieleu/signUp');
+    navigate('/lumieleu/signup');
   };
 
   /* Eye Component 상태에 따른 비밀번호 보이기/보이지 않기 */
