@@ -24,6 +24,14 @@ function IndexPage() {
       clearTimeout(timeoutId);
     };
   }, []);
+  useEffect(() => {
+    // 스크롤 금지 설정
+    document.body.style.overflow = 'hidden';
+    return () => {
+      // 컴포넌트 unmount 시 스크롤 설정 해제
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
 
   return (
     <section className="relative w-screen h-screen">
@@ -42,10 +50,11 @@ function IndexPage() {
         </p>
       </div>
       <div className={`${S.goGallery} ${isMouseMoving ? S.moveUp : ''}`}>
-        <Link to="/lumieleu/gallery" className="font-serif text-2xl">
+        <Link
+          to="/lumieleu/gallery"
+          className="px-4 py-1 font-serif text-xl rounded-full border-[1px]"
+        >
           작품 보러가기
-          <br />
-          <span>&#8744;</span>
         </Link>
       </div>
     </section>
