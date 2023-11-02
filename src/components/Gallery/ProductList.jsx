@@ -15,9 +15,25 @@ import {
   Scrollbar,
   Keyboard,
 } from 'swiper/modules';
+import { useRef } from 'react';
 
 function ProductList() {
   const [productList, setProductList] = useState([]);
+  const circleRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const mouseX = e.clientX - 20;
+    const mouseY = e.clientY - 90;
+    circleRef.current.style.left = mouseX + 'px';
+    circleRef.current.style.top = mouseY + 'px';
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   useEffect(() => {
     const getHomeList = async () => {
@@ -38,6 +54,17 @@ function ProductList() {
       swiper.slideTo(swiper.slides.length - 1);
     } else if (activeIndex === 9) {
       swiper.slideTo(6);
+    } else if (activeIndex === swiper.slides.length - 1) {
+      // 마지막 페이지인 경우
+      // 원을 작동시키는 코드 추가
+      if (circleRef.current) {
+        circleRef.current.classList.add(S.active); // 작동을 나타내는 클래스 추가
+      }
+    } else {
+      // 마지막 페이지가 아닌 경우, 원 작동 클래스 제거
+      if (circleRef.current) {
+        circleRef.current.classList.remove(S.active);
+      }
     }
   };
 
@@ -74,20 +101,24 @@ function ProductList() {
         </p>
       </SwiperSlide>
 
-      {productList?.map((products, index) => (
-        <SwiperSlide key={products.id} className={S.swiperSlide}>
-          <ProductItem products={products} index={index} />
-        </SwiperSlide>
-      ))}
+      {productList
+        ?.sort((a, b) => a.index - b.index)
+        .map((products, index) => (
+          <SwiperSlide key={products.id} className={S.swiperSlide}>
+            <ProductItem products={products} index={index} />
+          </SwiperSlide>
+        ))}
 
       <SwiperSlide className={`${S.swiperSlide}`}>
+        <div className={S.active} ref={circleRef}></div>
         <span className="block   font-serif text-[80px] text-center">
           LUMIÉRE <br />
           DE LAUBE
         </span>
       </SwiperSlide>
-      {/* <div className={`${S.swiper-button-prev}`}></div>
-      <div className={`${S.swiper-button-prev}`}></div> */}
+      {/* <revButton ref={navigationPreveRef}>
+
+      </revButton> */}
     </Swiper>
   );
 }

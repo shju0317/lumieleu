@@ -72,3 +72,9 @@ export function hasNumber(text) {
   const regex = /\d/;
   return regex.test(text);
 }
+
+/* 영문 검증 로직 */
+export function engReg(text) {
+  const engReg = /^[a-zA-Z]*$/;
+  return engReg.test(String(text).toLowerCase());
+}
