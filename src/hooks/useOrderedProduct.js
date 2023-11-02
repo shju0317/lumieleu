@@ -18,7 +18,7 @@ function useOrderedProduct() {
 
   async function fetchOrderedProduct() {
     const order = await pb.collection('orders').getFullList({
-      filter: `orderer = '${userId}'`,
+      filter: `user = '${userId}'`,
       expand: 'product',
       // sort: '-date'
     });

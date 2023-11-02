@@ -5,9 +5,9 @@ import { array } from 'prop-types';
 function OrderedProduct({ item }) {
   let orderDate = item.created.split(" ")[0];
   // console.log(item.expand.order[0].id)
-  
+
   return (
-    <div>
+    <>
       <div className="flex justify-between text-sm px-1">
         <p>주문번호 {item.id}</p>
         <p>주문일자 {orderDate}</p>
@@ -30,7 +30,7 @@ function OrderedProduct({ item }) {
           <MyPageButton text="배송조회"/> 
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

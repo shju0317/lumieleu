@@ -22,6 +22,8 @@ const router = createBrowserRouter(
       <Route path="order" element={<Order />} />
       <Route path="signin" element={<SignIn />} />
       <Route path="signus" element={<SignUs />} />
+      <Route path="gallery" element={<Gallery />} />
+      <Route path="mypage" element={<MyPage />} />
     </Route>
   )
 );
