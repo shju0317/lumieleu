@@ -1,4 +1,6 @@
 import pb from '@/api/pocketbase';
+import { createContext } from 'react';
+import { useContext } from 'react';
 import { create } from 'zustand';
 
 const initalAuthState = {
@@ -74,3 +76,14 @@ const useAuthStore = create((set) => ({
 }));
 
 export default useAuthStore;
+
+const AuthContext = createContext();
+
+export const useAuth = () => {
+  const authValue = useContext(AuthContext);
+  if (!authValue) {
+    throw new Error('useAuth 훅은 AuthProvider 내부에서만 사용할 수 있습니다.');
+  }
+
+  return authValue;
+};

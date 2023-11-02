@@ -658,10 +658,10 @@ function OrderList() {
         <form onSubmit={handlePaymentEvent}>
           <div className={`${S.OrderLine}`}></div>
           <span className={S.OrderOrdererInfoTitle}>주문자 정보</span>
-          <div className={`${S.OrderOrdererInfoWrapper} mt-10`}>
-            <span className="text-[1.25rem]">
+          <div className={`${S.OrderOrdererInfoWrapper} mt-10 ml-[150px]`}>
+            <span className="text-[18px] mr-[220px]">
               이메일
-              <span className="mr-[12.5rem]">*</span>
+              <span>*</span>
             </span>
             <div>
               <input
@@ -685,10 +685,10 @@ function OrderList() {
           </div>
           <div className={S.OrderLine}></div>
           <span className={S.OrderShippingAddress}>배송지 정보</span>
-          <span className="text-[1.25rem] flex mr-[48rem] mb-16 mt-10">
+          <span className="text-[18px] flex mr-[48rem] mb-16 mt-10 ml-[150px]">
             배송지 선택
           </span>
-          <div className="flex ml-20 mb-16">
+          <div className="flex ml-[240px] mb-16">
             <div>
               <input
                 type="text"
@@ -717,7 +717,7 @@ function OrderList() {
               value="주소찾기"
             />
           </div>
-          <div className="flex ml-[16.5rem]" name="shippingAddress">
+          <div className="flex ml-[420px]" name="shippingAddress">
             <div className="flex justify-between mr-5 mb-16">
               <input
                 type="checkbox"
@@ -739,8 +739,8 @@ function OrderList() {
               <label htmlFor="myCheckbox2">새로운 배송지</label>
             </div>
           </div>
-          <div className="flex mr-48 mb-16">
-            <span className="text-[1.25rem] flex self-start mr-48 mb-16">
+          <div className="flex mr-48 mb-16 ml-[150px]">
+            <span className="text-[18px] flex self-start mr-48 mb-16">
               주소
               <span className="mr-9">*</span>
             </span>
@@ -864,7 +864,7 @@ function OrderList() {
             </div>
           </div>
           <div className="flex mb-16">
-            <span className="text-[1.25rem] flex self-start">받으시는 분</span>
+            <span className="text-[18px] flex self-start ml-[150px]">받으시는 분</span>
             <span className="mr-[11rem]">*</span>
             <div>
               <input
@@ -886,8 +886,8 @@ function OrderList() {
               </p>
             </div>
           </div>
-          <div className="mr-40 flex mb-16">
-            <span className="text-[1.25rem] flex self-start mb-16">
+          <div className="mr-40 flex mb-16 ml-[150px]">
+            <span className="text-[18px] flex self-start mb-16">
               일반전화
             </span>
             <span className="mr-[12.5rem]">*</span>
@@ -960,8 +960,8 @@ function OrderList() {
               </p>
             </div>
           </div>
-          <div className="flex mr-40 mb-16">
-            <span className="text-[1.25rem] flex self-start mb-16">
+          <div className="flex mr-40 mb-16 ml-[150px]">
+            <span className="text-[18px] flex self-start mb-16">
               휴대전화
             </span>
             <span className="mr-[12.5rem]">*</span>
@@ -1035,7 +1035,7 @@ function OrderList() {
             </div>
           </div>
           <div className="flex mr-48 mb-16">
-            <span className="text-[1.25rem] flex self-start mb-16 mr-[12rem]">
+            <span className="text-[18px] flex self-start mb-16 mr-[12rem] ml-[150px]">
               배송메시지
             </span>
             <input
@@ -1045,9 +1045,9 @@ function OrderList() {
             />
           </div>
           <div className={S.OrderLine}></div>
-          <span className="mr-[50rem] text-[1.5rem] font-bold">결제수단</span>
+          <span className="mr-[50rem] ml-[150px] text-[20px] font-bold">결제수단</span>
           <div className="flex mr-52 mt-10 ">
-            <span className="text-[1.25rem] flex self-start mb-16 mr-56">
+            <span className="text-[18px] flex self-start mb-16 mr-[210px] ml-[150px]">
               결제방식
             </span>
             <button
