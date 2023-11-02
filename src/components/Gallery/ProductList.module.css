@@ -1,5 +1,5 @@
 .swiper {
-  @apply w-full h-full px-5;
+  @apply w-full h-[calc(100%-25px)] relative pt-4;
 }
 
 .swiperslide img {
@@ -32,4 +32,10 @@
 
 .active {
   @apply absolute w-10 h-10 bg-black rounded-full;
+}
+
+.navButton {
+  @apply absolute z-10 bottom-14;
+  @apply flex items-center justify-center;
+  @apply w-40 h-10;
 }

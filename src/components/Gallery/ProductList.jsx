@@ -7,6 +7,9 @@ import 'swiper/css';
 import 'swiper/css/scrollbar';
 import 'swiper/css/navigation';
 
+import nextButton from '/imgs/Arrow.svg';
+import prevButton from '/imgs/BackArrow.svg';
+
 import {
   Mousewheel,
   FreeMode,
@@ -21,6 +24,10 @@ function ProductList() {
   const [productList, setProductList] = useState([]);
   const circleRef = useRef(null);
 
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+
+  //마지막 페이지 마우스 이동
   const handleMouseMove = (e) => {
     const mouseX = e.clientX - 20;
     const mouseY = e.clientY - 90;
@@ -35,6 +42,7 @@ function ProductList() {
     };
   }, []);
 
+  // 포켓 호스트에서 받아오기
   useEffect(() => {
     const getHomeList = async () => {
       try {
@@ -47,6 +55,7 @@ function ProductList() {
     getHomeList();
   }, []);
 
+  //스와이퍼 각 페이지별 옵션 설정
   const handleSlideChange = (swiper) => {
     const { activeIndex } = swiper;
 
@@ -66,10 +75,14 @@ function ProductList() {
     }
   };
 
+  //스와이퍼 설정
   const swiperParms = {
     slidesPerView: 'auto',
     mousewheel: true,
-    navigation: true,
+    navigation: {
+      prevEl: prevRef.current, // 이전 버튼
+      nextEl: nextRef.current, // 다음 버튼
+    },
     freeMode: true,
     keyboard: true,
     scrollbar: {
@@ -83,6 +96,12 @@ function ProductList() {
       FreeMode,
       Keyboard,
     ],
+    onBeforeInit: (swiper) => {
+      // 초기 설정
+      swiper.params.navigation.prevEl = prevRef.current;
+      swiper.params.navigation.nextEl = nextRef.current;
+      swiper.navigation.update();
+    },
   };
 
   return (
@@ -91,6 +110,13 @@ function ProductList() {
       className={`${S.swiper}`}
       onSlideChange={handleSlideChange}
     >
+      <button ref={prevRef} className={`${S.navButton} left-0 tabin`}>
+        <img src={prevButton} alt="이전" />
+      </button>
+      <button ref={nextRef} className={`${S.navButton} right-0`}>
+        <img src={nextButton} alt="다음" />
+      </button>
+
       <SwiperSlide className={`${S.swiperSlide}`}>
         <p className=" w-[700px] -left-[250px] top-[250px] -rotate-90 relative  h-[200px] text-[40px] ">
           Lorem Ipsum is simply dummy text of the printing and tyunce with
