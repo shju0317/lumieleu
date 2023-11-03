@@ -1,6 +1,9 @@
 .goGallery {
   @apply w-full h-[20%] bg-gradient-to-t from-black;
   @apply flex items-center justify-center;
+  color: white;
+  text-align: center;
+  bottom: (-100%);
   @apply text-center text-white;
 
   bottom: -100%;

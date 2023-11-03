@@ -139,6 +139,8 @@ function ProductList() {
           DE LAUBE
         </span>
       </SwiperSlide>
+      {/* <div className={`${S.swiper-button-prev}`}></div>
+      <div className={`${S.swiper-button-prev}`}></div> */}
       {/* <revButton ref={navigationPreveRef}>
 
       </revButton> */}
