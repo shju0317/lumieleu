@@ -7,15 +7,6 @@ import Addittion from '/Addition.svg';
 import Subtract from '/Subtract.svg';
 import Delete from '/Delete.svg';
 
-async function fetchCartData() {
-  const userCartData = await pb.collection('cart').getFullList({
-    filter: `user = '${authUserDataId}'`,
-    expand: 'user, product',
-    requestKey: null,
-  });
-
-  return userCartData;
-} 
 function SelectedProductItem({
   filteredItem,
   expandProduct,
@@ -60,19 +51,19 @@ function SelectedProductItem({
         <li>
           <div className="w-[960px] border-t-2 border-black ml-6"></div>
           <div className="flex mt-5 mb-5 ml-10">
-            <Link to={`/lumieleu/${idArray}`}>
+            <Link to={`/lumieleu/productdetails/${idArray}`}>
               <div className="flex w-[12rem]">
                 {expandProduct.map((item, index) => {
                   const imageURLs = getPbImageURL(item, 'image');
                   console.log('imageURLs:', imageURLs);
-                 return imageURLs.map((url, urlIndex) => (
-                   <img
-                     key={`${item.id}-${index}-${urlIndex}`}
-                     src={url}
-                     alt={item.title}
-                     className={`${S.selectedImage} mr-10`}
-                   />
-                 ));
+                  return imageURLs.map((url, urlIndex) => (
+                    <img
+                      key={`${item.id}-${index}-${urlIndex}`}
+                      src={url}
+                      alt={item.title}
+                      className={`${S.selectedImage} mr-10`}
+                    />
+                  ));
                 })}
                 <span>{`${titleArray}`}</span>
               </div>
