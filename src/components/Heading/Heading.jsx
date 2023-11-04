@@ -9,7 +9,7 @@ function Heading() {
     switch (location) {
       case '/lumieleu/':
         return [S.textWhite, S.textWhite];
-      case '/lumieleu/signin':
+      case '/lumieleu/login':
       case '/lumieleu/signUp':
         return [S.bgBlack, S.bgWhite];
       default:
@@ -22,7 +22,6 @@ function Heading() {
   );
 
   return (
-
     <div className={S.headingWrapper}>
       <div className={`${S.logoSection} ${logoSectionClass}`}>
         <Link
@@ -35,7 +34,6 @@ function Heading() {
       <div className={`${S.navSection} ${navSectionCalss}`}>
         <Nav />
       </div>
-
     </div>
   );
 }

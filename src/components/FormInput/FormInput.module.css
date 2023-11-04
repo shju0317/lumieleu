@@ -5,11 +5,11 @@
   @apply font-medium w-[7.8125rem]  block flex-shrink-0;
 }
 .input {
-  @apply border w-full px-3 h-[3.125rem]  block pl-5;
+  @apply border w-full px-3 h-[2.8125rem]  block pl-5;
 }
 
 .inputWrapper {
-  @apply flex  mb-5 items-center w-full;
+  @apply flex mb-3 items-center w-full;
 }
 
 .checkbox {
