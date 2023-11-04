@@ -1,5 +1,5 @@
 import Button from '@/components/Button';
-import S from '@/pages/SignIn/SignIn.module.css';
+import S from '@/pages/LogIn/LogIn.module.css';
 import { engReg, pwReg } from '@/utils/validation';
 import debounce from '@/utils/debounce';
 import { useEffect } from 'react';
@@ -19,14 +19,13 @@ const inputProps = [
 
   {
     label: '비밀번호',
-    placeholder:
-      '비밀번호 10자리 이상, 14자리이하 하나의 알파벳 문자를 포함하는 특수문자',
+    placeholder: '10자-14자, 알파벳 1개, 특수문자 1개 포함',
     name: 'password',
     type: 'password',
   },
   {
     label: '비밀번호 확인',
-    placeholder: '비밀번호를 다시 한번 입력해 주세요',
+    placeholder: '비밀번호를 한번더 입력해 주세요',
     name: 'passwordConfirm',
     type: 'password',
   },
@@ -44,7 +43,7 @@ const inputProps = [
 
   {
     label: '휴대전화',
-    placeholder: '연락처를 입력해 주세요 ',
+    placeholder: '연락처(숫자만)를 입력해 주세요 ',
     name: 'phoneNumber',
   },
   {
@@ -87,26 +86,28 @@ function SignUp() {
     if (!pwReg(password)) {
       toast.error(
         '비밀번호는 10자리 이상, 14자리이하 하나의 알파벳 문자를 포함하는 특수문자를 입력해주세요!',
-        { duration: 1000 }
+        { duration: 3000 }
       );
       throw new Error(
         '비밀번호는 10자리 이상, 14자리이하 하나의 알파벳 문자를 포함하는 특수문자를 입력해주세요!',
-        { duration: 1000 }
+        { duration: 3000 }
       );
     }
-    if (name === 'name' && !engReg(name)) {
-      toast.error('닉네임은 영문으로만 입력해주세요!', { duration: 1000 });
-      throw new Error('닉네임은 영문으로만 입력해주세요!');
+    if (!engReg(username)) {
+      toast.error('아이디는 영문과 숫자로만 입력해주세요', { duration: 1000 });
+      throw new Error('이미 존재하는 아이디 입니다');
     }
     if (password !== passwordConfirm) {
       toast.error('비밀번호가 일치하지 않습니다!', { duration: 1000 });
       throw new Error('비밀번호가 일치하지 않습니다!');
     }
+    // 존재하는 아이디 토스트띄우기
+    // 존재하는 이메일 토스트띄우기
   };
 
   // 전송버튼 클릭시
   const signUp = useAuthStore((state) => state.signUp);
-  const signIn = useAuthStore((state) => state.signIn);
+  const logIn = useAuthStore((state) => state.logIn);
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const handleRegister = async (e) => {
@@ -115,7 +116,7 @@ function SignUp() {
       // 비밀번호 일치하는지 확인
       validateSignUp();
       await signUp(formState);
-      await signIn(username, password);
+      await logIn(username, password);
     } catch (error) {
       console.error('Error during registration:', error);
     }
@@ -133,11 +134,11 @@ function SignUp() {
 
   return (
     <>
-      <section className=" h-screen mb-[66px]">
+      <section className="h-screen">
         {/* 왼쪽영역 */}
-        <div className=" p-24 overflow-hidden bg-black text-white w-1/2 h-screen py-24 fixed top-0 left-0">
+        <div className="p-24 overflow-hidden bg-black text-white w-1/2 h-screen py-24 fixed top-0 left-0">
           <p className="absolute bottom-48 left-7 text-6xl font-light">
-            lumière de l'aube
+            lumière de l&lsquo;aube
           </p>
           <p className="absolute bottom-32 left-8 font-thin">
             Lorem Ipsum is simply dummy text of the printing and tyunce with
@@ -152,7 +153,7 @@ function SignUp() {
         </div>
         {/* 오른쪽영역 */}
         <div className=" w-1/2 float-right p-24 flex flex-col items-center justify-center bg-white z-10">
-          <h2 className="text-2ㅍxl mb-8 text-[#454444]">회원가입</h2>
+          <h2 className="text-5xl mb-8 font-semibold text-[#454444]">Signin</h2>
           {/* input */}
           <form
             onSubmit={handleRegister}
@@ -193,10 +194,6 @@ function SignUp() {
               <div>
                 <input type="checkbox" />
                 <label>[선택] SMS 수신을 동의하십니까?</label>
-              </div>
-              <div>
-                <input type="checkbox" />
-                <label>[선택] 이메일 수신을 동의하십니까?</label>
               </div>
             </div>
 

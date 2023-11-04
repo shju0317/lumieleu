@@ -1,17 +1,17 @@
 .OrderWrapper {
-  @apply w-full h-full mt-11 flex flex-col items-center justify-start;
+  @apply w-full h-[1500rem] mt-[1160px] flex flex-col items-center justify-start;
 }
 
 .OrderOrdererInfoTitle {
-  @apply mr-[48rem] text-[1.5rem] font-bold;
+  @apply ml-[150px] text-[20px] font-bold;
 }
 
 .OrderOrdererInfoWrapper {
-  @apply flex mr-[13rem] mb-16;
+  @apply flex mb-16;
 }
 
 .OrderShippingAddress {
-  @apply mr-[48rem] text-[1.5rem] font-bold;
+  @apply ml-[150px] mr-[48rem] text-[20px] font-bold;
 }
 
 .OrderLine {
@@ -39,5 +39,5 @@
 }
 
 .validationFontStyle {
-  @apply pointer-events-none text-[9px] font-bold;
+  @apply pointer-events-none text-[8px] font-bold;
 }

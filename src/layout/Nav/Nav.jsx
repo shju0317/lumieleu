@@ -5,9 +5,12 @@ import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import useAuthStore from '@/store/store';
 import React from 'react';
+import CSS from './Nav.module.css';
+import { useNavigate } from 'react-router-dom';
 
 function Nav() {
   const location = useLocation();
+  const Navigate = useNavigate();
 
   const categories = ['ABOUT', 'GALLERY', 'CART', 'MYPAGE', 'LOGIN'];
   /* 인증 정보에 따른 로그인 ➡️ 로그아웃으로 변경 */
@@ -21,8 +24,21 @@ function Nav() {
   const handleSignOut = () => {
     toast.success('정상적으로 로그아웃 되었습니다.', { duration: 1000 });
     signOut();
+    Navigate('/lumieleu/');
     // kakaoLogout();
   };
+
+  const activeClass = (category) => {
+    if (location.pathname === `/lumieleu/`) {
+      return `${CSS.hoverunderbarWhite}`;
+    } else {
+      return `${
+        location.pathname.toUpperCase().includes(category) ? CSS.underbar : ''
+      } ${CSS.hoverunderbar}`;
+    }
+  };
+
+  // const hoverClass = 0;
 
   return (
     <nav>
@@ -34,11 +50,7 @@ function Nav() {
             <li key={category} className="">
               <Link
                 to={`/lumieleu/${category.toLowerCase()}`}
-                className={` py-2  ${
-                  location.pathname.toUpperCase().includes(category)
-                    ? 'border-b-4 pb-1 box-border border-black '
-                    : ''
-                } `}
+                className={activeClass(category)}
               >
                 {category}
               </Link>
@@ -51,11 +63,16 @@ function Nav() {
             <React.Fragment key={category}>
               {isAuth && user && <li>{user.name} 님</li>}
               {isAuth ? (
-                <div className="cursor-pointer" onClick={handleSignOut}>
-                  로그아웃
+                <div
+                  className={`${activeClass(category)} cursor-pointer`}
+                  onClick={handleSignOut}
+                >
+                  LOGOUT
                 </div>
               ) : (
-                <Link to="signin">LOGIN</Link>
+                <Link to="login" className={activeClass(category)}>
+                  LOGIN
+                </Link>
               )}
             </React.Fragment>
           ))}

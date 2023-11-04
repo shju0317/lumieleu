@@ -20,7 +20,7 @@ const authStore = (set) => ({
   },
 
   /* Pb SDK를 사용한 로그인 */
-  signIn: async (username, password) => {
+  logIn: async (username, password) => {
     const authData = await pb
       .collection(USER_COLLECECTION)
       .authWithPassword(username, password);
@@ -35,7 +35,7 @@ const authStore = (set) => ({
         token,
       }),
       false,
-      'auth/signin'
+      'auth/login'
     );
 
     return authData;
@@ -74,6 +74,8 @@ const authStore = (set) => ({
 
   /* Pb SDK를 사용한 카카오톡으로 로그인 */
   SignWithKaKao: async () => {
+    // console.log(kakaoAuth);
+
     const kakaoAuth = await pb
       .collection(USER_COLLECECTION)
       .authWithOAuth2({ provider: 'kakao' });
