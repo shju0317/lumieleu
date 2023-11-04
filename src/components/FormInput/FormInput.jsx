@@ -12,6 +12,7 @@ export function FormInput({ type = 'text', name = null, label, ...restProps }) {
       <input
         type={type}
         name={name}
+        required
         id={id}
         className={S.input}
         {...restProps}

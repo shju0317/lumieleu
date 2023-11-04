@@ -6,9 +6,11 @@ import toast from 'react-hot-toast';
 import useAuthStore from '@/store/store';
 import React from 'react';
 import CSS from './Nav.module.css';
+import { useNavigate } from 'react-router-dom';
 
 function Nav() {
   const location = useLocation();
+  const Navigate = useNavigate();
 
   const categories = ['ABOUT', 'GALLERY', 'CART', 'MYPAGE', 'LOGIN'];
   /* 인증 정보에 따른 로그인 ➡️ 로그아웃으로 변경 */
@@ -22,6 +24,7 @@ function Nav() {
   const handleSignOut = () => {
     toast.success('정상적으로 로그아웃 되었습니다.', { duration: 1000 });
     signOut();
+    Navigate('/lumieleu/');
     // kakaoLogout();
   };
 
@@ -60,11 +63,14 @@ function Nav() {
             <React.Fragment key={category}>
               {isAuth && user && <li>{user.name} 님</li>}
               {isAuth ? (
-                <div className={activeClass(category)} onClick={handleSignOut}>
+                <div
+                  className={`${activeClass(category)} cursor-pointer`}
+                  onClick={handleSignOut}
+                >
                   LOGOUT
                 </div>
               ) : (
-                <Link to="signin" className={activeClass(category)}>
+                <Link to="login" className={activeClass(category)}>
                   LOGIN
                 </Link>
               )}
