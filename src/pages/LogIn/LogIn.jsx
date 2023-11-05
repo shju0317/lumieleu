@@ -3,7 +3,7 @@ import { useId } from 'react';
 import { useState } from 'react';
 import S from './LogIn.module.css';
 import { toast } from 'react-hot-toast';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useAuthStore from '@/store/store';
 import { useEffect } from 'react';
 import { userNameReg, pwReg } from '@/utils';
@@ -80,15 +80,12 @@ function Login() {
     await kakaoLogIn();
   };
 
-  /* 이메일 및 비밀번호 형식에 유효하지않을때 덮여씌워질 tailwindcss className */
-  // const inValidBorder = 'border w-[25rem] h-[3.125rem] pl-5 ';
-
   return (
     <>
       <section className="flex flex-1 h-screen">
         <div className="flex-1 p-24 bg-black text-white py-24 relative">
           <p className="absolute bottom-48 left-7 text-6xl font-light">
-            lumière de l'aube
+            lumière de l&lsquo;aube
           </p>
           <p className="absolute bottom-32 left-8 font-thin">
             Lorem Ipsum is simply dummy text of the printing and tyunce with
@@ -124,7 +121,6 @@ function Login() {
               <div className="flex relative">
                 <label htmlFor={id}></label>
                 <input
-                  // className={ isPasswordValid || 'border border-black w-[25rem] h-[3.125rem] pl-5 ' }
                   className="border  w-[25rem] h-[3.125rem] pl-5 "
                   onChange={handleInput}
                   name="password"
@@ -134,7 +130,6 @@ function Login() {
                 />
                 {isPasswordVisible ? (
                   <EyeClosed
-                    // className="absolute right-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 mt-3"
                     className="absolute right-0 top-0 transform -translate-x-1/2 mt-3"
                     onClick={handlePasswordVisible}
                   />
