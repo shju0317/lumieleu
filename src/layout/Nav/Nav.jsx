@@ -7,6 +7,7 @@ import useAuthStore from '@/store/store';
 import React from 'react';
 import CSS from './Nav.module.css';
 import { useNavigate } from 'react-router-dom';
+import { kakaoLogout } from '@/utils/kakaoLogout';
 
 function Nav() {
   const location = useLocation();
@@ -24,8 +25,8 @@ function Nav() {
   const handleSignOut = () => {
     toast.success('정상적으로 로그아웃 되었습니다.', { duration: 1000 });
     signOut();
+    kakaoLogout();
     Navigate('/lumieleu/');
-    // kakaoLogout();
   };
 
   const activeClass = (category) => {
