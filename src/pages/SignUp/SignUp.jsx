@@ -63,7 +63,7 @@ const checkIfIdOrEmailExists = async (username, email) => {
     });
 
     const emailExists = await pb.collection('users').getList(1, 50, {
-      filter: `email = "${email}"`,
+      // filter: `email = "${email}"`,
     });
 
     console.log(emailExists);

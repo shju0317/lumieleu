@@ -10,7 +10,7 @@ function Heading() {
       case '/lumieleu/':
         return [S.textWhite, S.textWhite];
       case '/lumieleu/login':
-      case '/lumieleu/signUp':
+      case '/lumieleu/signup':
         return [S.bgBlack, S.bgWhite];
       default:
         return [S.bgWhite, S.bgWhite];
