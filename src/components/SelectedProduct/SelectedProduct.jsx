@@ -18,7 +18,7 @@ function SelectedProduct() {
 
   async function fetchCartData() {
     const userCartData = await pb.collection('cart').getFullList({
-      filter: `user = '${authUserDataId}'`,
+      filter: `user = '${authUserDataId}' && pendingOrders = 'true'`,
       expand: 'user, product',
       requestKey: null,
     });

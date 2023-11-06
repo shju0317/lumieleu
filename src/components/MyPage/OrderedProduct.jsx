@@ -1,4 +1,4 @@
-import { getPbImageURL } from '@/utils';
+import { getPbProductImageURL } from '@/utils';
 import MyPageButton from './MyPageButton';
 import { array } from 'prop-types';
 
@@ -14,24 +14,30 @@ function OrderedProduct({ item }) {
       </div>
       <div className="flex gap-4 justify-between items-center border border-black rounded px-6 py-4">
         <img
-          src={getPbImageURL(item, item.expand.product.image)}
+          src={getPbProductImageURL(item, item.expand.product.image)}
           alt={`${item.expand.product.title}`}
           className="w-24 h-36 border"
         />
         <dl className="text-sm">
-          <dt className="font-semibold text-base">{item.expand.product.title}</dt>
-          <dd>{item.selectedTotal}원 / {item.selectedQuantity}개</dd>
-          <dt className="font-semibold">받는사람</dt><dd>{item.receiver}</dd>
-          <dt className="font-semibold">받는주소</dt><dd>{item.shippingAddress}</dd>
+          <dt className="font-semibold text-base">
+            {item.expand.product.title}
+          </dt>
+          <dd>
+            {item.selectedTotal}원 / {item.selectedQuantity}개
+          </dd>
+          <dt className="font-semibold">받는사람</dt>
+          <dd>{item.receiver}</dd>
+          <dt className="font-semibold">받는주소</dt>
+          <dd>{item.shippingAddress}</dd>
         </dl>
         <div className="">배송완료</div>
         <div className="flex flex-col gap-2">
-          <MyPageButton text="구매평 작성"/> 
-          <MyPageButton text="배송조회"/> 
+          <MyPageButton text="구매평 작성" />
+          <MyPageButton text="배송조회" />
         </div>
       </div>
     </>
-  )
+  );
 }
 
 OrderedProduct.propTypes = {
