@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import pb from '@/api/pocketbase';
 import toast from 'react-hot-toast';
 import Spinner from '../Spinner';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 // import useStorage from '@/hooks/useStorage';
@@ -20,21 +19,23 @@ import {
   landlinePhoneThirdReg,
 } from '@/utils/validation';
 import S from './OrderList.module.css';
-
-const PB = import.meta.env.VITE_PB_URL;
-const PB_CART_ENDPOINT = `${PB}/api/collections/cart/records`;
-
-async function fetchProducts() {
-  const response = await axios(PB_CART_ENDPOINT);
-  return await response.data;
-}
+import useStorage from '@/hooks/useStorage';
 
 function OrderList() {
   const navigate = useNavigate();
 
-  // const { storageData } = useStorage('pocketbase_auth');
-  // const authUser = storageData?.model;
-  const authUserId = 'w0ngk55y58ddbqr';
+  const { storageData } = useStorage('pocketbase_auth');
+  const [authUserData, setAuthUserData] = useState(storageData?.model);
+  const [updateProduct, setUpdateProduct] = useState([]);
+  const [updateRestExpand, setUpdateRestExpand] = useState([]);
+
+  useEffect(() => {
+    setAuthUserData(storageData?.model);
+  }, [storageData?.model]);
+
+  const authUserDataId = authUserData?.id;
+  console.log(authUserDataId);
+
   const [userData, setUserData] = useState([]);
   const [selectedCartData, setSelectedCartData] = useState([]);
   const [saveUserId, setSaveUserId] = useState('');
@@ -106,16 +107,40 @@ function OrderList() {
     }
   };
 
+  async function fetchCartData() {
+    const userCartData = await pb.collection('cart').getFullList({
+      filter: `user = '${authUserDataId}' && (pendingOrders = 'false' || pendingOrders = 'true')`,
+      expand: 'user, product',
+      requestKey: null,
+    });
+
+    return userCartData;
+  }
+
   const {
     isLoading,
     data: cartData,
     error,
-  } = useQuery(['cart'], fetchProducts, {
+  } = useQuery(['cart'], () => fetchCartData(), {
     retry: 2,
   });
 
-  let dataItems = cartData?.items || [];
+  let dataItems = cartData || [];
 
+  console.log(dataItems);
+
+  const [arrayDataItems, setArrayDataItems] = useState([]);
+
+  useEffect(() => {
+    if (typeof dataItems === 'object') {
+      const dataArray = Object.keys(dataItems).map((key) => {
+        return dataItems[key];
+      });
+      setArrayDataItems(dataArray);
+    }
+    console.log('arrayDataItems:', arrayDataItems);
+  }, [arrayDataItems]);
+  
   /* if (Array.isArray(dataItems) && dataItems.length > 0) {
     dataItems.forEach((item) => {
       const userId = item.user;
@@ -125,11 +150,10 @@ function OrderList() {
 
   useEffect(() => {
     if (!isLoading && Array.isArray(dataItems) && dataItems.length > 0) {
-      const filteredData = dataItems.filter(
-        (item) => item.user === 'w0ngk55y58ddbqr' //authUser.name // authUser.id
-      );
+      const filteredData = dataItems.filter((item) => item.userTest === 'abc');
 
       if (filteredData.length > 0) {
+        console.log('filteredData:', filteredData);
         setSelectedCartData(filteredData);
       }
     }
@@ -145,9 +169,9 @@ function OrderList() {
         });
 
         const filetedUserDataItems = fullUserDataItems.filter(
-          (item) => item.id === 'w0ngk55y58ddbqr' //authUser.name // authUser.id
+          (item) => item.id === authUserDataId
         );
-
+        console.log('filetedUserDataItems:', filetedUserDataItems);
         setUserDataItems(filetedUserDataItems);
 
         if (filetedUserDataItems && filetedUserDataItems.length > 0) {
@@ -190,12 +214,12 @@ function OrderList() {
     e.preventDefault();
 
     const itemsData = selectedCartData.map((item) => ({
-      selectedSize: item?.selectedSize,
       selectedQuantity: item?.selectedQuantity,
       selectedPrice: item?.selectedSubtotal,
       selectedTitle: item?.selectedProductTitle,
       cart: item?.id,
-      user: item?.user,
+      user: authUserDataId,
+      // product: item.expand.product.id,
       name: item?.userName,
     }));
 
@@ -864,7 +888,9 @@ function OrderList() {
             </div>
           </div>
           <div className="flex mb-16">
-            <span className="text-[18px] flex self-start ml-[150px]">받으시는 분</span>
+            <span className="text-[18px] flex self-start ml-[150px]">
+              받으시는 분
+            </span>
             <span className="mr-[11rem]">*</span>
             <div>
               <input
@@ -887,9 +913,7 @@ function OrderList() {
             </div>
           </div>
           <div className="mr-40 flex mb-16 ml-[150px]">
-            <span className="text-[18px] flex self-start mb-16">
-              일반전화
-            </span>
+            <span className="text-[18px] flex self-start mb-16">일반전화</span>
             <span className="mr-[12.5rem]">*</span>
             <div>
               <input
@@ -961,9 +985,7 @@ function OrderList() {
             </div>
           </div>
           <div className="flex mr-40 mb-16 ml-[150px]">
-            <span className="text-[18px] flex self-start mb-16">
-              휴대전화
-            </span>
+            <span className="text-[18px] flex self-start mb-16">휴대전화</span>
             <span className="mr-[12.5rem]">*</span>
             <div>
               <input
@@ -1045,7 +1067,9 @@ function OrderList() {
             />
           </div>
           <div className={S.OrderLine}></div>
-          <span className="mr-[50rem] ml-[150px] text-[20px] font-bold">결제수단</span>
+          <span className="mr-[50rem] ml-[150px] text-[20px] font-bold">
+            결제수단
+          </span>
           <div className="flex mr-52 mt-10 ">
             <span className="text-[18px] flex self-start mb-16 mr-[210px] ml-[150px]">
               결제방식
