@@ -28,7 +28,7 @@ const useAuthStore = create((set) => ({
   // },
 
   /* Pb SDK를 사용한 로그인 */
-  signIn: async (userNameOrEmail, password) => {
+  LogIn: async (userNameOrEmail, password) => {
     try {
       const user = await pb
         .collection('users')
@@ -40,7 +40,7 @@ const useAuthStore = create((set) => ({
     }
   },
 
-  // signIn: async (userNameOrEmail, password) => {
+  // LogIn: async (userNameOrEmail, password) => {
   //   return await pb
   //     .collection('users')
   //     .authWithPassword(userNameOrEmail, password);

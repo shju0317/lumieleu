@@ -1,9 +1,9 @@
 import Button from '@/components/Button';
 import { useId } from 'react';
 import { useState } from 'react';
-import S from './SignIn.module.css';
+import S from './LogIn.module.css';
 import { toast } from 'react-hot-toast';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useAuthStore from '@/store/store';
 import { useEffect } from 'react';
 import { userNameReg, pwReg } from '@/utils';
@@ -11,7 +11,7 @@ import debounce from '@/utils/debounce';
 import EyeClosed from '@/components/EyeClosed';
 import EyeOpen from '@/components/EyeOpen';
 
-function Signin() {
+function Login() {
   const id = useId();
   /* username Password 유효성 검사 및 조건부 렌더링 함수 */
   const [formData, setFormData] = useState({
@@ -36,7 +36,7 @@ function Signin() {
 
   /* PB Data 접근 및 해당 로그인 */
   const navigate = useNavigate();
-  const signIn = useAuthStore((state) => state.signIn);
+  const logIn = useAuthStore((state) => state.logIn);
   const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
@@ -54,19 +54,18 @@ function Signin() {
 
     try {
       const { username, password } = formData;
-      await signIn(username, password);
+      await logIn(username, password);
     } catch (error) {
-      toast.error(
-        '로그인에 실패했습니다. 아이디와 패스워드를 다시 확인해주세요',
-        { duration: 1000 }
-      );
+      toast.error('아이디와 패스워드를 다시 확인해주세요', {
+        duration: 2000,
+      });
       throw new Error(error);
     }
   };
 
   /* 회원가입 페이지 이동 */
   const handleMoveSignUp = () => {
-    navigate('/lumieleu/signUp');
+    navigate('/lumieleu/signup');
   };
 
   /* Eye Component 상태에 따른 비밀번호 보이기/보이지 않기 */
@@ -76,20 +75,17 @@ function Signin() {
   };
 
   /* KaKao 사용자 로그인 */
-  const kakaoSignIn = useAuthStore((state) => state.SignWithKaKao);
-  const handleSigninKakao = async () => {
-    await kakaoSignIn();
+  const kakaoLogIn = useAuthStore((state) => state.SignWithKaKao);
+  const handleLoginKakao = async () => {
+    await kakaoLogIn();
   };
-
-  /* 이메일 및 비밀번호 형식에 유효하지않을때 덮여씌워질 tailwindcss className */
-  // const inValidBorder = 'border w-[25rem] h-[3.125rem] pl-5 ';
 
   return (
     <>
       <section className="flex flex-1 h-screen">
         <div className="flex-1 p-24 bg-black text-white py-24 relative">
           <p className="absolute bottom-48 left-7 text-6xl font-light">
-            lumière de l'aube
+            lumière de l&lsquo;aube
           </p>
           <p className="absolute bottom-32 left-8 font-thin">
             Lorem Ipsum is simply dummy text of the printing and tyunce with
@@ -103,19 +99,19 @@ function Signin() {
           </div>
         </div>
         <div className="flex-1 px-24 flex flex-col items-center justify-center bg-white z-10">
-          <h2 className="text-center text-7xl font-extralight mb-16 text-[#454444]">
-            Sign In
-          </h2>
           <form
             onSubmit={onSubmit}
             className="flex flex-col items-center gap-5"
           >
+            <h2 className="text-5xl font-semibold mb-6 text-[#454444]">
+              Login
+            </h2>
             <div>
-              <label htmlFor={id}></label>
+              <label htmlFor="username"></label>
               <input
                 onChange={handleInput}
                 name="username"
-                id={id}
+                id="username"
                 type="text"
                 placeholder="아이디를 입력해 주세요"
                 className="border w-[25rem] h-[3.125rem] pl-5 "
@@ -125,8 +121,7 @@ function Signin() {
               <div className="flex relative">
                 <label htmlFor={id}></label>
                 <input
-                  // className={ isPasswordValid || 'border border-black w-[25rem] h-[3.125rem] pl-5 ' }
-                  className="border border-black w-[25rem] h-[3.125rem] pl-5 "
+                  className="border  w-[25rem] h-[3.125rem] pl-5 "
                   onChange={handleInput}
                   name="password"
                   id={id}
@@ -135,13 +130,12 @@ function Signin() {
                 />
                 {isPasswordVisible ? (
                   <EyeClosed
-                    // className="absolute right-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 mt-3"
-                    className="absolute right-0 top-0 transform  -translate-x-1/2 mt-3"
+                    className="absolute right-0 top-0 transform -translate-x-1/2 mt-3"
                     onClick={handlePasswordVisible}
                   />
                 ) : (
                   <EyeOpen
-                    className="absolute right-0 top-0 transform  -translate-x-1/2 mt-3"
+                    className="absolute right-0 top-0 transform -translate-x-1/2 mt-3"
                     onClick={handlePasswordVisible}
                   />
                 )}
@@ -156,7 +150,7 @@ function Signin() {
             <Button type="submit" color="black" className="w-[25rem]">
               로그인
             </Button>
-            <Button color="yellow" onClick={handleSigninKakao}>
+            <Button color="yellow" onClick={handleLoginKakao}>
               카카오톡 로그인
             </Button>
             <Button
@@ -173,4 +167,4 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default Login;

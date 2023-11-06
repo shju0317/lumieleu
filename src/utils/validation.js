@@ -73,8 +73,8 @@ export function hasNumber(text) {
   return regex.test(text);
 }
 
-/* 영문 검증 로직 */
+/* 아이디 영문 + 숫자  검증 로직 */
 export function engReg(text) {
-  const engReg = /^[a-zA-Z]*$/;
+  const engReg = /^[a-zA-Z0-9]*$/;
   return engReg.test(String(text).toLowerCase());
 }
