@@ -55,6 +55,29 @@ const inputProps = [
   },
 ];
 
+// ID , email 중복체크
+const checkIfIdOrEmailExists = async (username, email) => {
+  try {
+    const idExists = await pb.collection('users').getList(1, 50, {
+      filter: `username = "${username}"`,
+    });
+
+    const emailExists = await pb.collection('users').getList(1, 50, {
+      filter: `email = "${email}"`,
+    });
+
+    console.log(emailExists);
+
+    return {
+      idExists: idExists.totalItems,
+      emailExists: emailExists.totalItems,
+    };
+  } catch (error) {
+    console.error('아이디 및 이메일 존재 여부 확인 중 오류 발생:', error);
+    throw error;
+  }
+};
+
 function SignUp() {
   /* Input 사용자 입력 값 감지 */
   const initalState = {
@@ -65,9 +88,10 @@ function SignUp() {
     passwordConfirm: '',
     phoneNumber: '',
     address: '',
+    emailVisibility: true,
   };
   const [formState, setFormState] = useState(initalState);
-  const { name, username, password, passwordConfirm } = formState;
+  const { name, username, password, passwordConfirm, email } = formState;
 
   // input의 onChange , 0.5초 이후에 리랜더링 되도록 debounce
   const handleInput = (e) => {
@@ -105,25 +129,42 @@ function SignUp() {
     }
     // 존재하는 아이디 toast.error('ID가 존재합니다.', { duration: 1000 })
 
-    const isIdExists = await checkIfIdExists(username);
-    if (isIdExists) {
+    // const isIdExists = await checkIfIdExists(username);
+    // if (isIdExists) {
+    //   toast.error('ID가 이미 존재합니다.', { duration: 1000 });
+    //   throw new Error('ID가 이미 존재합니다.');
+    // }
+    // 아이디와 이메일이 이미 존재하는지 확인
+    const { idExists, emailExists } = await checkIfIdOrEmailExists(
+      username,
+      email
+    );
+    console.log(idExists);
+    console.log(emailExists);
+
+    if (idExists) {
       toast.error('ID가 이미 존재합니다.', { duration: 1000 });
       throw new Error('ID가 이미 존재합니다.');
     }
-  };
 
-  const checkIfIdExists = async (username) => {
-    //  서버와 통신하여 아이디 존재 여부확인
-    const usersListData = await pb.collection('users').getList(1, 50, {
-      filter: `username = "${username}"`,
-    });
-    //  usersListData 가 존재하면 true 설정
-    if (usersListData.totalItems) {
-      return true;
-    } else {
-      return false;
+    if (emailExists) {
+      toast.error('이미 존재하는 이메일입니다.', { duration: 1000 });
+      throw new Error('이미 존재하는 이메일입니다.');
     }
   };
+
+  // const checkIfIdExists = async (username) => {
+  //   //  서버와 통신하여 아이디 존재 여부확인
+  //   const usersListData = await pb.collection('users').getList(1, 50, {
+  //     filter: `username = "${username}"`,
+  //   });
+  //   //  usersListData 가 존재하면 true 설정
+  //   if (usersListData.totalItems) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
   // 전송버튼 클릭시
   const signUp = useAuthStore((state) => state.signUp);
