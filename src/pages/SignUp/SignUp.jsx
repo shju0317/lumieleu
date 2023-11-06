@@ -8,6 +8,7 @@ import { toast } from 'react-hot-toast';
 import { FormInput } from '@/components/FormInput/FormInput';
 import useAuthStore from '@/store/store';
 import { useNavigate } from 'react-router-dom';
+import { useId } from 'react';
 
 // lable , input map 배열
 const inputProps = [
@@ -132,6 +133,62 @@ function SignUp() {
     }
   }, [name, navigate, user]);
 
+  /* 체크 박스 데이터를 담을 배열 */
+  const [checkboxData, setCheckboxData] = useState([
+    {
+      id: 'termsOfService',
+      labelText: '[필수] 서비스 이용약관 동의',
+      className: 'mr-1',
+      required: true,
+      name: 'termsOfService',
+      checked: false,
+    },
+    {
+      id: 'privacyPolicy',
+      labelText: '[필수] 개인정보 수집 및 이용 동의',
+      className: 'mr-1',
+      required: true,
+      name: 'privacyPolicy',
+      checked: false,
+    },
+    {
+      id: 'ageConfirmation',
+      labelText: '[선택] 쇼핑정보 수신 동의',
+      className: 'mr-1',
+      required: true,
+      name: 'ageConfirmation',
+      checked: false,
+    },
+    {
+      id: 'marketingInfo',
+      labelText: '[선택] SMS 수신을 동의하십니까?',
+      className: 'mr-1',
+      name: 'marketingInfo',
+      checked: false,
+    },
+  ]);
+
+  /*체크 박스 단일 선택 시 */
+  const handleSingleCheck = (name) => {
+    setCheckboxData((prevData) =>
+      prevData.map((checkbox) =>
+        checkbox.name === name
+          ? { ...checkbox, checked: !checkbox.checked }
+          : checkbox
+      )
+    );
+  };
+
+  /* 체크 박스 전체 선택 */
+  const handleAllCheck = (selectAll) => {
+    const updatedCheckboxData = checkboxData.map((checkbox) => ({
+      ...checkbox,
+      checked: selectAll,
+    }));
+    setCheckboxData(updatedCheckboxData);
+  };
+  const id = useId();
+
   return (
     <>
       <section className="h-screen">
@@ -176,25 +233,36 @@ function SignUp() {
             {/* 체크박스 */}
             <div>
               <div>
-                <input type="checkbox" />
-                <label>전체 동의합니다.</label>
+                <input
+                  id={id}
+                  type="checkbox"
+                  className="mr-1"
+                  checked={checkboxData.every((checkbox) => checkbox.checked)}
+                  onChange={() =>
+                    handleAllCheck(
+                      !checkboxData.every((checkbox) => checkbox.checked)
+                    )
+                  }
+                />
+                <label htmlFor={id} type="checkbox">
+                  전체 동의합니다.
+                </label>
               </div>
-              <div>
-                <input type="checkbox" />
-                <label>[필수] 이용약관 동의 </label>
-              </div>
-              <div>
-                <input type="checkbox" />
-                <label>[필수] 개인정보 수집 및 이용 동의</label>
-              </div>
-              <div>
-                <input type="checkbox" />
-                <label>[선택] 쇼핑정보 수신 동의</label>
-              </div>
-              <div>
-                <input type="checkbox" />
-                <label>[선택] SMS 수신을 동의하십니까?</label>
-              </div>
+              {checkboxData.map(
+                ({ labelText, className, required, name, checked, id }) => (
+                  <div key={id}>
+                    <input
+                      id={id}
+                      type="checkbox"
+                      required={required}
+                      checked={checked}
+                      className={className}
+                      onChange={() => handleSingleCheck(name)}
+                    />
+                    <label htmlFor={id}>{labelText}</label>
+                  </div>
+                )
+              )}
             </div>
 
             <Button type="submit" color="black" className="w-[25rem] my-5">
