@@ -9,6 +9,7 @@ import { FormInput } from '@/components/FormInput/FormInput';
 import useAuthStore from '@/store/store';
 import { useNavigate } from 'react-router-dom';
 import { useId } from 'react';
+import pb from '@/api/pocketbase';
 
 // lable , input map 배열
 const inputProps = [
@@ -83,7 +84,7 @@ function SignUp() {
   const handleDebounceInput = debounce(handleInput, 500);
 
   /* 회원가입 시 유효성 검사 */
-  const validateSignUp = () => {
+  const validateSignUp = async () => {
     if (!pwReg(password)) {
       toast.error(
         '비밀번호는 10자리 이상, 14자리이하 하나의 알파벳 문자를 포함하는 특수문자를 입력해주세요!',
@@ -102,8 +103,26 @@ function SignUp() {
       toast.error('비밀번호가 일치하지 않습니다!', { duration: 1000 });
       throw new Error('비밀번호가 일치하지 않습니다!');
     }
-    // 존재하는 아이디 토스트띄우기
-    // 존재하는 이메일 토스트띄우기
+    // 존재하는 아이디 toast.error('ID가 존재합니다.', { duration: 1000 })
+
+    const isIdExists = await checkIfIdExists(username);
+    if (isIdExists) {
+      toast.error('ID가 이미 존재합니다.', { duration: 1000 });
+      throw new Error('ID가 이미 존재합니다.');
+    }
+  };
+
+  const checkIfIdExists = async (username) => {
+    //  서버와 통신하여 아이디 존재 여부확인
+    const usersListData = await pb.collection('users').getList(1, 50, {
+      filter: `username = "${username}"`,
+    });
+    //  usersListData 가 존재하면 true 설정
+    if (usersListData.totalItems) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   // 전송버튼 클릭시
@@ -121,7 +140,7 @@ function SignUp() {
     } catch (error) {
       console.error('Error during registration:', error);
     }
-    console.log(formState);
+    // console.log(formState);
   };
 
   useEffect(() => {
