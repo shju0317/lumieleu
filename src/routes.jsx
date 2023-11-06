@@ -18,6 +18,7 @@ const ProductDetails = lazy(() =>
 const Gallery = lazy(() => import('@/pages/Gallery/GalleryPage'));
 const About = lazy(() => import('@/pages/About/About'));
 const MyPage = lazy(() => import('@/pages/MyPage/MyPage'));
+const EditProfile = lazy(() => import('@/pages/EditProfile/EditProfile'));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,6 +34,7 @@ const router = createBrowserRouter(
       <Route path="gallery" element={<Gallery />} />
       <Route path="about" element={<About />} />
       <Route path="mypage" element={<MyPage />} />
+      <Route path="editprofile" element={<EditProfile />} />
     </Route>
   )
 );

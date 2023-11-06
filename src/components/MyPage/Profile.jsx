@@ -1,13 +1,16 @@
+import pb from '@/api/pocketbase';
 import MyPageButton from './MyPageButton';
 
 function Profile() {
+  const user = pb.authStore.model;
+
   return (
     <section className="flex justify-between border border-black rounded px-8 py-4 mx-auto max-w-3xl">
       <h2 className="hidden">나의 정보</h2>
       <div className="flex gap-4 items-center">
         <img src="/public/profile.svg" alt="프로필" />
         <div>
-          <p><strong>김회원</strong>님 안녕하세요!</p>
+          <p><strong>{user.name}</strong>님 안녕하세요!</p>
           <MyPageButton text="프로필 수정"/>      
         </div>
       </div>

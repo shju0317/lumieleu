@@ -3,8 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 function useOrderedProduct() {
   // const userInfo = pb.authStore.model;
-
-  const userId = 'dmadsf8349efnev';
+  const userId = pb.authStore.model.id;
 
   // async function fetchOrderedProduct() {
   //   const order = await pb.collection('users').getFullList({
