@@ -1,5 +1,6 @@
 import pb from '@/api/pocketbase';
 import MyPageButton from './MyPageButton';
+import { Link } from 'react-router-dom';
 
 function Profile() {
   const user = pb.authStore.model;
@@ -11,7 +12,7 @@ function Profile() {
         <img src="/public/profile.svg" alt="프로필" />
         <div>
           <p><strong>{user.name}</strong>님 안녕하세요!</p>
-          <MyPageButton text="프로필 수정"/>      
+          <Link to="/lumieleu/editprofile"><MyPageButton text="프로필 수정"/></Link>      
         </div>
       </div>
       <div className="flex border-l border-black gap-6 pl-10">

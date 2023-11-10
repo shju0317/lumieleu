@@ -4,6 +4,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
+// import ProtectRoute from './components/Route/ProtectRoute';
 
 const RootLayout = lazy(() => import('@/layout/RootLayout/RootLayout'));
 const Home = lazy(() => import('@/pages/Home/Home'));
@@ -33,7 +34,12 @@ const router = createBrowserRouter(
       <Route path="productdetails" element={<ProductDetails />} />
       <Route path="gallery" element={<Gallery />} />
       <Route path="about" element={<About />} />
-      <Route path="mypage" element={<MyPage />} />
+      <Route path="mypage" element={
+      // <ProtectRoute>
+      //   <MyPage />
+      // </ProtectRoute>
+      <MyPage />
+    } />
       <Route path="editprofile" element={<EditProfile />} />
     </Route>
   )
